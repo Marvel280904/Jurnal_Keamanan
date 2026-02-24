@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@yield('title') - Sistem Jurnal Operasional Keamanan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="bg-gray-100 font-sans" x-data="{ sidebarOpen: false }">
+
+    {{-- Full-width Header --}}
+    <header class="fixed top-0 left-0 right-0 h-16 bg-white border-b z-50 flex items-center justify-between px-4 md:px-6">
+        {{-- Left: Toggle (mobile) + Shield + Title --}}
+        <div class="flex items-center gap-3">
+            <button @click="sidebarOpen = !sidebarOpen" class="md:hidden text-gray-500 hover:text-blue-600 mr-1">
+                <i class="bi bi-list text-2xl"></i>
+            </button>
+            <div class="w-10 h-10 rounded-xl bg-blue-900 flex items-center justify-center flex-shrink-0">
+                <i class="bi bi-shield text-white text-lg"></i>
+            </div>
+            <div>
+                <p class="font-bold text-base text-gray-800 leading-tight">Admin Dashboard</p>
+                <p class="text-xs text-gray-500 hidden sm:block">Sistem Jurnal Operasional Keamanan</p>
+            </div>
+        </div>
+
+        {{-- Right: Bell + User --}}
+        <div class="flex items-center gap-3 md:gap-4">
+            @if(auth()->user()->role !== 'Admin')
+                <button class="relative text-gray-400 hover:text-blue-600">
+                    <i class="bi bi-bell text-xl"></i>
+                    <span class="absolute -top-1 -right-1 bg-red-500 w-2 h-2 rounded-full"></span>
+                </button>
+            @endif
+
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-full bg-blue-200 flex items-center justify-center flex-shrink-0">
+                    <i class="bi bi-person text-lg text-gray-600"></i>
+                </div>
+                <div class="hidden sm:block">
+                    <p class="text-sm font-bold text-gray-800 leading-tight">{{ auth()->user()->nama }}</p>
+                    <p class="text-xs text-gray-500">{{ auth()->user()->role }}</p>
+                </div>
+            </div>
+
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="text-gray-400 hover:text-red-500">
+                    <i class="bi bi-box-arrow-right text-xl"></i>
+                </button>
+            </form>
+        </div>
+    </header>
+
+    {{-- Mobile overlay --}}
+    <div x-show="sidebarOpen" @click="sidebarOpen = false"
+         class="fixed inset-0 bg-black/40 z-30 md:hidden"></div>
+
+    {{-- Sidebar --}}
+    <aside class="fixed left-0 top-16 h-[calc(100vh-4rem)] w-56 bg-slate-900 text-white z-40 flex flex-col
+                  transition-transform duration-300
+                  -translate-x-full md:translate-x-0"
+           :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'">
+        <nav class="mt-4 px-3 space-y-1 flex-1">
+            @if(auth()->user()->role === 'Admin')
+                <a href="{{ route('admin.dashboard') }}"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition
+                        {{ request()->routeIs('admin.dashboard') ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800' }}">
+                    <i class="bi bi-grid text-lg"></i>
+                    <span class="text-sm">Dashboard</span>
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 transition">
+                    <i class="bi bi-geo-alt text-lg"></i>
+                    <span class="text-sm">Lokasi & Shift</span>
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 transition">
+                    <i class="bi bi-person text-lg"></i>
+                    <span class="text-sm">Manajemen User</span>
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 transition">
+                    <i class="bi bi-people text-lg"></i>
+                    <span class="text-sm">Manajemen Grup</span>
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 transition">
+                    <i class="bi bi-journal-text text-lg"></i>
+                    <span class="text-sm">System Logs</span>
+                </a>
+            @endif
+        </nav>
+    </aside>
+
+    {{-- Main Content --}}
+    <div class="pt-16 md:pl-56 min-h-screen">
+        <main class="p-4 md:p-6">
+            @if(session('success'))
+                <div class="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 flex justify-between items-center rounded">
+                    <span><i class="bi bi-check-circle-fill mr-2"></i>{{ session('success') }}</span>
+                    <button onclick="this.parentElement.remove()">&times;</button>
+                </div>
+            @endif
+
+            @yield('content')
+        </main>
+    </div>
+
+</body>
+</html>
