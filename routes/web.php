@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LocationShiftController;
 use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\GroupManagementController;
+use App\Http\Controllers\SystemLogController;
 
 // Halaman Login (Hanya bisa diakses jika belum login/guest)
 Route::middleware('guest')->group(function () {
@@ -20,6 +21,9 @@ Route::middleware('auth')->group(function () {
 
     // Admin - Dashboard
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+
+    // Admin - System Logs
+    Route::get('/admin/system-logs', [SystemLogController::class, 'index'])->name('admin.system-logs');
 
     // Admin - User Management
     Route::get('/admin/user-management', [UserManagementController::class, 'index'])->name('admin.user-management');

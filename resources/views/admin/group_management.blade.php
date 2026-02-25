@@ -89,9 +89,6 @@
             
             <div class="flex items-center justify-between mb-5">
                 <h3 id="modalViewMembersTitle" class="text-xl font-bold text-gray-800 whitespace-nowrap overflow-hidden text-ellipsis">Group Members</h3>
-                <button onclick="closeModalViewMembers()" class="text-gray-400 hover:text-gray-600 transition">
-                    <i class="bi bi-x-lg text-lg"></i>
-                </button>
             </div>
 
             <div class="overflow-y-auto flex-1 pr-2 space-y-3 mb-5">
@@ -126,6 +123,7 @@
         const title = document.getElementById('modalGroupTitle');
         const methodInput = document.getElementById('methodGroup');
         const inputNama = document.getElementById('inputNamaGrup');
+        const groupIdInput = document.getElementById('inputGroupId');
         const checkboxes = document.querySelectorAll('.satpam-checkbox');
 
         form.reset();
@@ -136,6 +134,7 @@
             form.action = `/admin/group/${id}`;
             methodInput.value = 'PUT';
             inputNama.value = nama;
+            if (groupIdInput) groupIdInput.value = id;
             
             checkboxes.forEach(cb => {
                 if (members.includes(cb.value)) {
@@ -146,6 +145,7 @@
             title.innerText = 'Add Group';
             form.action = "{{ route('admin.group.store') }}";
             methodInput.value = 'POST';
+            if (groupIdInput) groupIdInput.value = '';
         }
 
         modal.classList.remove('hidden');
@@ -171,13 +171,13 @@
         } else {
             emptyState.classList.add('hidden');
             membersList.forEach(member => {
-                const initials = member.name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
+                // const initials = member.name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
                 
                 const item = document.createElement('div');
                 item.className = 'flex items-center gap-4 p-3 bg-white border border-gray-100 shadow-sm rounded-xl';
                 item.innerHTML = `
                     <div class="w-12 h-12 rounded-full bg-blue-50 text-blue-600 font-bold flex items-center justify-center flex-shrink-0">
-                        ${initials}
+                        <i class="bi bi-person text-lg text-gray-600"></i>
                     </div>
                     <div>
                         <p class="font-bold text-gray-800 text-sm">${member.name}</p>

@@ -3,16 +3,7 @@
 @section('title', 'Admin Dashboard')
 
 @section('content')
-<div x-data="{
-    modalUser: false,
-    editUserId: null, editUserName: '', editUsername: '', editUserRole: '',
-    modalGroup: false,
-    editGroupId: null, editGroupName: '', editGroupDescription: '',
-    modalLoc: false,
-    editLocId: null, editLocName: '', editLocAddress: '',
-    modalShift: false,
-    editShiftId: null, editShiftName: '', editShiftStart: '', editShiftEnd: ''
-}">
+<div>
 
     {{-- Stat Cards --}}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
@@ -61,19 +52,19 @@
     <div class="bg-white p-6 rounded-xl shadow-sm mb-6">
         <h4 class="text-base font-bold text-gray-800 mb-4">Quick Actions</h4>
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <button @click="modalUser = true" class="bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-lg flex flex-col items-center justify-center transition">
+            <button onclick="openModalUser()" class="bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-lg flex flex-col items-center justify-center transition">
                 <span class="text-2xl font-light mb-1">+</span>
                 <span class="text-sm font-semibold">Add User</span>
             </button>
-            <button @click="editLocId = null; editLocName = ''; editLocAddress = ''; modalLoc = true" class="bg-green-600 hover:bg-green-700 text-white py-4 rounded-lg flex flex-col items-center justify-center transition">
+            <button onclick="openModalLoc()" class="bg-green-600 hover:bg-green-700 text-white py-4 rounded-lg flex flex-col items-center justify-center transition">
                 <span class="text-2xl font-light mb-1">+</span>
                 <span class="text-sm font-semibold">Add Location</span>
             </button>
-            <button @click="editShiftId = null; editShiftName = ''; editShiftStart = ''; editShiftEnd = ''; modalShift = true" class="bg-purple-600 hover:bg-purple-700 text-white py-4 rounded-lg flex flex-col items-center justify-center transition">
+            <button onclick="openModalShift()" class="bg-purple-600 hover:bg-purple-700 text-white py-4 rounded-lg flex flex-col items-center justify-center transition">
                 <span class="text-2xl font-light mb-1">+</span>
                 <span class="text-sm font-semibold">Add Shift</span>
             </button>
-            <button @click="modalGroup = true" class="bg-orange-600 hover:bg-orange-700 text-white py-4 rounded-lg flex flex-col items-center justify-center transition">
+            <button onclick="openModalGroup()" class="bg-orange-600 hover:bg-orange-700 text-white py-4 rounded-lg flex flex-col items-center justify-center transition">
                 <span class="text-2xl font-light mb-1">+</span>
                 <span class="text-sm font-semibold">Create Group</span>
             </button>
@@ -105,6 +96,130 @@
     @include('admin.modals.modal_location')
     @include('admin.modals.modal_shift')
     @include('admin.modals.modal_group')
+
+    <script>
+        // Modal User (Add/Edit) - same as User Management page
+        function openModalUser(id = null, nama = '', username = '', role = 'Admin') {
+            const modal = document.getElementById('modalUser');
+            const form = document.getElementById('formUser');
+            const title = document.getElementById('modalTitle');
+            const methodInput = document.getElementById('methodField');
+            const passNote = document.getElementById('passwordNote');
+            const passReq = document.getElementById('passwordInput');
+            const userIdInput = document.getElementById('inputUserId');
+
+            form.reset();
+
+            if (!id) {
+                title.innerText = 'Add User';
+                form.action = "{{ route('admin.user.store') }}";
+                methodInput.value = 'POST';
+                if (userIdInput) userIdInput.value = '';
+                passNote.classList.add('hidden');
+                passReq.required = true;
+            }
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeModalUser() {
+            document.getElementById('modalUser').classList.add('hidden');
+            document.getElementById('modalUser').classList.remove('flex');
+        }
+
+        // Modal Location (Add/Edit) - same as Location & Shift page
+        function openModalLoc(id = null, name = '', address = '') {
+            const modal = document.getElementById('modalLoc');
+            const form = document.getElementById('formLoc');
+            const title = document.getElementById('modalLocTitle');
+            const methodInput = document.getElementById('methodLoc');
+
+            form.reset();
+
+            if (!id) {
+                title.innerText = 'Add Location';
+                form.action = "{{ route('admin.location.store') }}";
+                methodInput.value = 'POST';
+            }
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeModalLoc() {
+            const modal = document.getElementById('modalLoc');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // Modal Shift (Add/Edit) - same as Location & Shift page
+        function openModalShift(id = null, name = '', start = '', end = '') {
+            const modal = document.getElementById('modalShift');
+            const form = document.getElementById('formShift');
+            const title = document.getElementById('modalShiftTitle');
+            const methodInput = document.getElementById('methodShift');
+
+            form.reset();
+
+            if (!id) {
+                title.innerText = 'Add Shift';
+                form.action = "{{ route('admin.shift.store') }}";
+                methodInput.value = 'POST';
+            }
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeModalShift() {
+            const modal = document.getElementById('modalShift');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // Modal Group (Add/Edit) - same as Group Management page
+        function openModalGroup(id = null, nama = '', members = []) {
+            const modal = document.getElementById('modalGroup');
+            const form = document.getElementById('formGroup');
+            const title = document.getElementById('modalGroupTitle');
+            const methodInput = document.getElementById('methodGroup');
+            const inputNama = document.getElementById('inputNamaGrup');
+            const groupIdInput = document.getElementById('inputGroupId');
+            const checkboxes = document.querySelectorAll('.satpam-checkbox');
+
+            form.reset();
+            checkboxes.forEach(cb => cb.checked = false);
+
+            if (!id) {
+                title.innerText = 'Add Group';
+                form.action = "{{ route('admin.group.store') }}";
+                methodInput.value = 'POST';
+                if (groupIdInput) groupIdInput.value = '';
+            }
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeModalGroup() {
+            document.getElementById('modalGroup').classList.add('hidden');
+            document.getElementById('modalGroup').classList.remove('flex');
+        }
+
+        // Auto-open modal jika ada error validasi
+        @if($errors->any())
+            window.onload = () => {
+                // Jika error berasal dari form Group (nama_grup / satpam_ids)
+                @if($errors->has('nama_grup'))
+                    openModalGroup();
+                @else
+                    // Default: anggap error berasal dari form User
+                    openModalUser();
+                @endif
+            };
+        @endif
+    </script>
 
 </div>
 @endsection

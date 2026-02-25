@@ -89,7 +89,9 @@
                     <i class="bi bi-people text-lg"></i>
                     <span class="text-sm">Manajemen Grup</span>
                 </a>
-                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 transition">
+                <a href="{{ route('admin.system-logs') }}"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition
+                        {{ request()->routeIs('admin.system-logs') ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800' }}">
                     <i class="bi bi-journal-text text-lg"></i>
                     <span class="text-sm">System Logs</span>
                 </a>

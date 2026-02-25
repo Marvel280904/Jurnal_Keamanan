@@ -8,33 +8,38 @@
         @if ($errors->any())
             <div id="alertError" class="mb-4 p-3 bg-red-50 border-l-4 border-red-500 text-red-700 text-xs rounded relative shadow-sm">
                 <div class="flex justify-between items-start">
-                    <div>
-                        <p class="font-bold mb-1">Terjadi kesalahan:</p>
-                        <ul class="list-disc list-inside">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
+                    @foreach ($errors->all() as $error)
+                        <p>{{ $error }}</p>
+                    @endforeach
                     <button type="button" onclick="this.parentElement.parentElement.remove()" class="text-red-500 hover:text-red-800">
                         <i class="bi bi-x-lg text-sm"></i>
                     </button>
                 </div>
             </div>
+
+            <script>
+                setTimeout(() => {
+                    const modal = document.getElementById('modalUser');
+                    if (!modal) return;
+                    const alert = modal.querySelector('#alertError');
+                    if (alert) alert.remove();
+                }, 2000);
+            </script>
         @endif
 
         <form id="formUser" action="" method="POST">
             @csrf
+            <input type="hidden" name="user_id" id="inputUserId" value="{{ old('user_id') }}">
             <input type="hidden" name="_method" id="methodField" value="POST">
 
             <div class="mb-3">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap <span class="text-red-500">*</span></label>
-                <input type="text" name="nama" id="inputNama" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm" required>
+                <input type="text" name="nama" id="inputNama" placeholder="Masukan Nama Lengkap" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm" required>
             </div>
 
             <div class="mb-3">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Username <span class="text-red-500">*</span></label>
-                <input type="text" name="username" id="inputUsername" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm" required>
+                <input type="text" name="username" id="inputUsername" placeholder="Masukan Username" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm" required>
             </div>
 
             <div class="mb-3">
@@ -42,7 +47,7 @@
                     Password
                     <span id="passwordNote" class="text-gray-400 font-normal text-xs hidden">(kosongkan jika tidak diubah)</span>
                 </label>
-                <input type="password" name="password" id="passwordInput" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm">
+                <input type="password" name="password" id="passwordInput" placeholder="Masukan Password" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm">
             </div>
 
             <div class="mb-5">

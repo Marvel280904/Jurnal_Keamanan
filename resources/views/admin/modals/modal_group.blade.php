@@ -10,8 +10,31 @@
 
         <h3 id="modalGroupTitle" class="text-xl font-bold mb-5 text-gray-800">Add Group</h3>
 
+        @if ($errors->any())
+            <div id="alertError" class="mb-4 p-3 bg-red-50 border-l-4 border-red-500 text-red-700 text-xs rounded relative shadow-sm">
+                <div class="flex justify-between items-start">
+                    @foreach ($errors->all() as $error)
+                        <p>{{ $error }}</p>
+                    @endforeach
+                    <button type="button" onclick="this.parentElement.parentElement.remove()" class="text-red-500 hover:text-red-800">
+                        <i class="bi bi-x-lg text-sm"></i>
+                    </button>
+                </div>
+            </div>
+
+            <script>
+                setTimeout(() => {
+                    const modal = document.getElementById('modalGroup');
+                    if (!modal) return;
+                    const alert = modal.querySelector('#alertError');
+                    if (alert) alert.remove();
+                }, 2000);
+            </script>
+        @endif
+
         <form id="formGroup" action="" method="POST">
             @csrf
+            <input type="hidden" name="group_id" id="inputGroupId" value="{{ old('group_id') }}">
             <input type="hidden" name="_method" id="methodGroup" value="POST">
 
             <div class="mb-5">

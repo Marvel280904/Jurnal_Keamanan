@@ -82,6 +82,7 @@
         const methodInput = document.getElementById('methodField');
         const passNote = document.getElementById('passwordNote');
         const passReq = document.getElementById('passwordInput');
+        const userIdInput = document.getElementById('inputUserId');
 
         form.reset();
 
@@ -89,6 +90,7 @@
             title.innerText = 'Edit User';
             form.action = `/admin/user/${id}`;
             methodInput.value = 'PUT';
+            if (userIdInput) userIdInput.value = id;
             document.getElementById('inputNama').value = nama;
             document.getElementById('inputUsername').value = username;
             document.getElementById('inputRole').value = role;
@@ -98,6 +100,7 @@
             title.innerText = 'Add User';
             form.action = "{{ route('admin.user.store') }}";
             methodInput.value = 'POST';
+            if (userIdInput) userIdInput.value = '';
             passNote.classList.add('hidden');
             passReq.required = true;
         }
@@ -135,8 +138,12 @@
     // Auto-open modal User jika ada error validasi
     @if($errors->any())
         window.onload = () => {
-            document.getElementById('modalUser').classList.remove('hidden');
-            document.getElementById('modalUser').classList.add('flex');
+            const userId = '{{ old('user_id', '') }}';
+            const nama = `{!! addslashes(old('nama', '')) !!}`;
+            const username = `{!! addslashes(old('username', '')) !!}`;
+            const role = '{{ old('role', 'Admin') }}';
+
+            openModalUser(userId ? userId : null, nama, username, role);
         };
     @endif
 </script>
