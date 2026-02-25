@@ -34,26 +34,4 @@ class User extends Authenticatable
     public function journals() {
         return $this->hasMany(Journal::class);
     }
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    
-    public static function viewUser() {
-        return self::all();
-    }
-
-    public static function createUser($data) {
-        return self::create($data);
-    }
-
-    public function editUser($data) {
-        return $this->update($data);
-    }
-
-    public function deleteUser() {
-        return $this->delete();
-    }
 }

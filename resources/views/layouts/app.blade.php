@@ -71,15 +71,21 @@
                     <i class="bi bi-grid text-lg"></i>
                     <span class="text-sm">Dashboard</span>
                 </a>
-                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 transition">
+                <a href="{{ route('admin.location-shift') }}"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition
+                        {{ request()->routeIs('admin.location-shift') ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800' }}">
                     <i class="bi bi-geo-alt text-lg"></i>
                     <span class="text-sm">Lokasi & Shift</span>
                 </a>
-                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 transition">
+                <a href="{{ route('admin.user-management') }}"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition
+                        {{ request()->routeIs('admin.user-management') ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800' }}">
                     <i class="bi bi-person text-lg"></i>
                     <span class="text-sm">Manajemen User</span>
                 </a>
-                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 transition">
+                <a href="{{ route('admin.group-management') }}"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition
+                        {{ request()->routeIs('admin.group-management') ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800' }}">
                     <i class="bi bi-people text-lg"></i>
                     <span class="text-sm">Manajemen Grup</span>
                 </a>
