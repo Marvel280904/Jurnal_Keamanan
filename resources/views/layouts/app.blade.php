@@ -21,7 +21,15 @@
                 <i class="bi bi-shield text-white text-lg"></i>
             </div>
             <div>
-                <p class="font-bold text-base text-gray-800 leading-tight">Admin Dashboard</p>
+                <p class="font-bold text-base text-gray-800 leading-tight">
+                    @if(auth()->user()->role === 'Admin')
+                        Admin Dashboard
+                    @elseif(auth()->user()->role === 'Satpam')
+                        Satpam Dashboard
+                    @else
+                        Dashboard
+                    @endif
+                </p>
                 <p class="text-xs text-gray-500 hidden sm:block">Sistem Jurnal Operasional Keamanan</p>
             </div>
         </div>
@@ -36,8 +44,8 @@
             @endif
 
             <div class="flex items-center gap-2">
-                <div class="w-8 h-8 rounded-full bg-blue-200 flex items-center justify-center flex-shrink-0">
-                    <i class="bi bi-person text-lg text-gray-600"></i>
+                <div class="w-8 h-8 rounded-full bg-blue-200 text-blue-600 font-bold flex items-center justify-center flex-shrink-0">
+                    {{ strtoupper(substr(auth()->user()->nama, 0, 2)) }}
                 </div>
                 <div class="hidden sm:block">
                     <p class="text-sm font-bold text-gray-800 leading-tight">{{ auth()->user()->nama }}</p>
@@ -75,25 +83,42 @@
                     class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition
                         {{ request()->routeIs('admin.location-shift') ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800' }}">
                     <i class="bi bi-geo-alt text-lg"></i>
-                    <span class="text-sm">Lokasi & Shift</span>
+                    <span class="text-sm">Location & Shift</span>
                 </a>
                 <a href="{{ route('admin.user-management') }}"
                     class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition
                         {{ request()->routeIs('admin.user-management') ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800' }}">
                     <i class="bi bi-person text-lg"></i>
-                    <span class="text-sm">Manajemen User</span>
+                    <span class="text-sm">User Management</span>
                 </a>
                 <a href="{{ route('admin.group-management') }}"
                     class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition
                         {{ request()->routeIs('admin.group-management') ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800' }}">
                     <i class="bi bi-people text-lg"></i>
-                    <span class="text-sm">Manajemen Grup</span>
+                    <span class="text-sm">Group Management</span>
                 </a>
                 <a href="{{ route('admin.system-logs') }}"
                     class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition
                         {{ request()->routeIs('admin.system-logs') ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800' }}">
                     <i class="bi bi-journal-text text-lg"></i>
                     <span class="text-sm">System Logs</span>
+                </a>
+            @elseif(auth()->user()->role === 'Satpam')
+                <a href="{{ route('satpam.dashboard') }}"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition
+                        {{ request()->routeIs('satpam.dashboard') ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800' }}">
+                    <i class="bi bi-grid text-lg"></i>
+                    <span class="text-sm">Dashboard</span>
+                </a>
+                <a href="#"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition text-slate-300 hover:bg-slate-800">
+                    <i class="bi bi-journal-plus text-lg"></i>
+                    <span class="text-sm">Journal Submission</span>
+                </a>
+                <a href="#"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition text-slate-300 hover:bg-slate-800">
+                    <i class="bi bi-clock-history text-lg"></i>
+                    <span class="text-sm">Log History</span>
                 </a>
             @endif
         </nav>

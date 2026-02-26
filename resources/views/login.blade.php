@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 
-<body class="bg-gradient-to-br from-blue-900 to-blue-800 flex items-center justify-center min-h-screen">
+<body class="bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 flex items-center justify-center min-h-screen">
 
     <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
         <div class="text-center mb-8">

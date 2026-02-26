@@ -7,6 +7,7 @@ use App\Http\Controllers\LocationShiftController;
 use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\GroupManagementController;
 use App\Http\Controllers\SystemLogController;
+use App\Http\Controllers\SatpamController;
 
 // Halaman Login (Hanya bisa diakses jika belum login/guest)
 Route::middleware('guest')->group(function () {
@@ -58,7 +59,5 @@ Route::middleware('auth')->group(function () {
     })->name('pga.dashboard');
 
     // Dashboard Satpam
-    Route::get('/satpam/dashboard', function () {
-        return "Selamat Datang Satpam!"; // Ganti dengan view dashboard satpam Anda
-    })->name('satpam.dashboard');
+    Route::get('/satpam/dashboard', [SatpamController::class, 'dashboard'])->name('satpam.dashboard');
 });

@@ -9,7 +9,7 @@
 
 {{-- Table Card --}}
 <div class="bg-white rounded-xl shadow-sm p-6">
-    <div class="flex items-center justify-between mb-5">
+    <div class="flex items-center justify-between mb-8">
         <h2 class="text-base font-bold text-gray-800">Users</h2>
         <button onclick="openModalUser()"
             class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">
@@ -27,7 +27,7 @@
                     <th class="pb-3 text-right">Actions</th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-gray-50">
+            <tbody class="divide-y divide-gray-300">
                 @forelse($users as $user)
                 <tr class="hover:bg-gray-50/50 transition">
                     <td class="py-3.5 pr-6 font-semibold text-gray-800">{{ $user->nama }}</td>

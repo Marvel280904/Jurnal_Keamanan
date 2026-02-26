@@ -31,7 +31,7 @@
         <div class="bg-white rounded-xl shadow-sm p-6">
 
             {{-- Header --}}
-            <div class="flex items-center justify-between mb-5">
+            <div class="flex items-center justify-between mb-8">
                 <h2 class="text-base font-bold text-gray-800">Location Management</h2>
                 {{-- Add: reset edit state lalu buka modal --}}
                 <button
@@ -52,7 +52,7 @@
                             <th class="pb-3 text-right">Actions</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-50">
+                    <tbody class="divide-y divide-gray-300">
                         @forelse($locations as $loc)
                         <tr class="hover:bg-gray-50/50 transition">
                             <td class="py-3.5 pr-6 font-semibold text-gray-800">{{ $loc->nama_lokasi }}</td>
@@ -110,7 +110,7 @@
         <div class="bg-white rounded-xl shadow-sm p-6">
 
             {{-- Header --}}
-            <div class="flex items-center justify-between mb-5">
+            <div class="flex items-center justify-between mb-8">
                 <h2 class="text-base font-bold text-gray-800">Shift Management</h2>
                 {{-- Add: reset edit state lalu buka modal --}}
                 <button
@@ -132,7 +132,7 @@
                             <th class="pb-3 text-right">Actions</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-50">
+                    <tbody class="divide-y divide-gray-300">
                         @forelse($shifts as $shift)
                         <tr class="hover:bg-gray-50/50 transition">
                             <td class="py-3.5 pr-6 font-semibold text-gray-800">{{ $shift->nama_shift }}</td>

@@ -12,7 +12,7 @@
     <div class="bg-white rounded-xl shadow-sm p-6">
         
         {{-- Header --}}
-        <div class="flex items-center justify-between mb-5">
+        <div class="flex items-center justify-between mb-8">
             <h2 class="text-base font-bold text-gray-800">Groups</h2>
             <button
                 onclick="openModalGroup()"
@@ -31,7 +31,7 @@
                         <th class="pb-3 text-right">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-50">
+                <tbody class="divide-y divide-gray-300">
                     @forelse($groups as $group)
                     <tr class="hover:bg-gray-50/50 transition">
                         <td class="py-3.5 pr-6 font-semibold text-gray-800">
