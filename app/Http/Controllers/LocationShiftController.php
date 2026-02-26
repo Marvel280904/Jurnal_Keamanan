@@ -35,7 +35,7 @@ class LocationShiftController extends Controller
 
         SystemLog::recordLog([
             'user_id'   => auth()->id(),
-            'aksi'      => 'Add Location',
+            'aksi'      => 'Create',
             'deskripsi' => "Admin menambah lokasi: {$location->nama_lokasi}",
         ]);
 
@@ -56,7 +56,7 @@ class LocationShiftController extends Controller
 
         SystemLog::recordLog([
             'user_id'   => auth()->id(),
-            'aksi'      => 'Edit Location',
+            'aksi'      => 'Update',
             'deskripsi' => "Admin mengubah lokasi: {$location->nama_lokasi}",
         ]);
 
@@ -70,7 +70,7 @@ class LocationShiftController extends Controller
 
         SystemLog::recordLog([
             'user_id'   => auth()->id(),
-            'aksi'      => 'Change Location Status',
+            'aksi'      => 'Change Status',
             'deskripsi' => "Admin mengubah status lokasi '{$location->nama_lokasi}' menjadi {$newStatus}",
         ]);
 
@@ -84,7 +84,7 @@ class LocationShiftController extends Controller
 
         SystemLog::recordLog([
             'user_id'   => auth()->id(),
-            'aksi'      => 'Delete Location',
+            'aksi'      => 'Delete',
             'deskripsi' => "Admin menghapus lokasi: {$nama}",
         ]);
 
@@ -109,7 +109,7 @@ class LocationShiftController extends Controller
 
         SystemLog::recordLog([
             'user_id'   => auth()->id(),
-            'aksi'      => 'Add Shift',
+            'aksi'      => 'Create',
             'deskripsi' => "Admin menambah shift: {$shift->nama_shift}",
         ]);
 
@@ -132,7 +132,7 @@ class LocationShiftController extends Controller
 
         SystemLog::recordLog([
             'user_id'   => auth()->id(),
-            'aksi'      => 'Edit Shift',
+            'aksi'      => 'Update',
             'deskripsi' => "Admin mengubah shift: {$shift->nama_shift}",
         ]);
 
@@ -146,7 +146,7 @@ class LocationShiftController extends Controller
 
         SystemLog::recordLog([
             'user_id'   => auth()->id(),
-            'aksi'      => 'Change Shift Status',
+            'aksi'      => 'Change Status',
             'deskripsi' => "Admin mengubah status shift '{$shift->nama_shift}' menjadi {$newStatus}",
         ]);
 
@@ -160,7 +160,7 @@ class LocationShiftController extends Controller
 
         SystemLog::recordLog([
             'user_id'   => auth()->id(),
-            'aksi'      => 'Delete Shift',
+            'aksi'      => 'Delete',
             'deskripsi' => "Admin menghapus shift: {$nama}",
         ]);
 

@@ -41,11 +41,9 @@
                     @php
                         $action = strtoupper($log->aksi);
                         $badgeClass = match (true) {
-                            str_contains(strtolower($log->aksi), 'add'),
                             str_contains(strtolower($log->aksi), 'create') => 'bg-emerald-100 text-emerald-700',
 
-                            str_contains(strtolower($log->aksi), 'edit'),
-                            str_contains(strtolower($log->aksi), 'change') => 'bg-blue-100 text-blue-700',
+                            str_contains(strtolower($log->aksi), 'update') => 'bg-blue-100 text-blue-700',
 
                             str_contains(strtolower($log->aksi), 'delete') => 'bg-rose-100 text-rose-700',
 
@@ -60,7 +58,7 @@
                             {{ $log->user->nama ?? '-' }}
                         </td>
                         <td class="py-3.5 pr-6 whitespace-nowrap">
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-semibold {{ $badgeClass }}">
+                            <span class="inline-flex items-center px-3 py-1 rounded-lg text-[11px] font-semibold {{ $badgeClass }}">
                                 {{ $action }}
                             </span>
                         </td>

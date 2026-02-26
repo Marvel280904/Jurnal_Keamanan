@@ -62,7 +62,7 @@
                                 <form action="{{ route('admin.location.toggle', $loc->id) }}" method="POST" class="inline">
                                     @csrf @method('PATCH')
                                     <button type="submit"
-                                        class="px-3 py-1 rounded-full text-xs font-semibold transition
+                                        class="px-3 py-1 rounded-lg text-xs font-bold transition
                                             {{ $loc->status === 'Active'
                                                 ? 'bg-green-100 text-green-700 hover:bg-green-200'
                                                 : 'bg-gray-100 text-gray-500 hover:bg-gray-200' }}"
@@ -143,7 +143,7 @@
                                 <form action="{{ route('admin.shift.toggle', $shift->id) }}" method="POST" class="inline">
                                     @csrf @method('PATCH')
                                     <button type="submit"
-                                        class="px-3 py-1 rounded-full text-xs font-semibold transition
+                                        class="px-3 py-1 rounded-lg text-xs font-bold transition
                                             {{ $shift->status === 'Active'
                                                 ? 'bg-green-100 text-green-700 hover:bg-green-200'
                                                 : 'bg-gray-100 text-gray-500 hover:bg-gray-200' }}"

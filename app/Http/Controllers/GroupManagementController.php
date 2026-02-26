@@ -44,7 +44,7 @@ class GroupManagementController extends Controller
 
         SystemLog::recordLog([
             'user_id'   => auth()->id(),
-            'aksi'      => 'Add Group',
+            'aksi'      => 'Create',
             'deskripsi' => "Admin membuat grup baru: {$group->nama_grup}",
         ]);
 
@@ -78,7 +78,7 @@ class GroupManagementController extends Controller
 
         SystemLog::recordLog([
             'user_id'   => auth()->id(),
-            'aksi'      => 'Edit Group',
+            'aksi'      => 'Update',
             'deskripsi' => "Admin mengubah data grup: {$group->nama_grup}",
         ]);
 
@@ -98,7 +98,7 @@ class GroupManagementController extends Controller
 
         SystemLog::recordLog([
             'user_id'   => auth()->id(),
-            'aksi'      => 'Delete Group',
+            'aksi'      => 'Delete',
             'deskripsi' => "Admin menghapus grup: {$nama}",
         ]);
 

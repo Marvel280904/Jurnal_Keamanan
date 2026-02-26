@@ -29,7 +29,9 @@
             </div>
 
             <div class="mb-5">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Alamat</label>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                    Alamat <span class="text-red-500">*</span>
+                </label>
                 <textarea
                     id="inputLocAddress"
                     name="alamat_lokasi"

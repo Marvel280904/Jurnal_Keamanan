@@ -171,13 +171,13 @@
         } else {
             emptyState.classList.add('hidden');
             membersList.forEach(member => {
-                // const initials = member.name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
+                const initials = member.name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
                 
                 const item = document.createElement('div');
                 item.className = 'flex items-center gap-4 p-3 bg-white border border-gray-100 shadow-sm rounded-xl';
                 item.innerHTML = `
                     <div class="w-12 h-12 rounded-full bg-blue-50 text-blue-600 font-bold flex items-center justify-center flex-shrink-0">
-                        <i class="bi bi-person text-lg text-gray-600"></i>
+                        ${initials}
                     </div>
                     <div>
                         <p class="font-bold text-gray-800 text-sm">${member.name}</p>

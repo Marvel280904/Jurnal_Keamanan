@@ -75,19 +75,33 @@
     <div class="bg-white p-6 rounded-xl shadow-sm">
         <h4 class="text-base font-bold text-gray-800 mb-4">Recent Activity</h4>
         <div class="space-y-4">
-            @foreach($recent_logs as $log)
+            @forelse($recent_logs as $log)
+            @php
+                $action = strtoupper($log->aksi);
+                $badgeClass = match (true) {
+                    str_contains(strtolower($log->aksi), 'create') => 'bg-emerald-100 text-emerald-700',
+
+                    str_contains(strtolower($log->aksi), 'update') => 'bg-blue-100 text-blue-700',
+
+                    str_contains(strtolower($log->aksi), 'delete') => 'bg-rose-100 text-rose-700',
+
+                    default => 'bg-gray-100 text-gray-700',
+                };
+            @endphp
             <div class="flex items-start justify-between">
                 <div class="flex items-start gap-3">
                     <span class="mt-1.5 w-2 h-2 rounded-full bg-blue-500 flex-shrink-0"></span>
                     <div>
                         <p class="text-sm font-semibold text-gray-800">{{ $log->user->nama }}</p>
                         <p class="text-sm text-gray-500">{{ $log->deskripsi }}</p>
-                        <span class="inline-block mt-1 text-xs uppercase tracking-wide border border-gray-300 text-gray-600 px-2 py-0.5 rounded">{{ $log->aksi }}</span>
+                        <span class="inline-block mt-1 text-xs font-bold uppercase tracking-wide px-2 py-0.5 rounded {{ $badgeClass }}">{{ $action }}</span>
                     </div>
                 </div>
                 <span class="text-xs text-gray-400 whitespace-nowrap ml-4">{{ $log->created_at->format('d M Y, H:i') }}</span>
             </div>
-            @endforeach
+            @empty
+                <span class="text-md text-gray-400 whitespace-nowrap">Belum ada aktivitas yang terekam.</span>
+            @endforelse
         </div>
     </div>
 

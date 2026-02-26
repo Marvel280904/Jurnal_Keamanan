@@ -41,7 +41,7 @@
                                 default  => 'bg-gray-100 text-gray-600',
                             };
                         @endphp
-                        <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $roleColor }}">
+                        <span class="px-3 py-1 rounded-lg text-xs font-semibold {{ $roleColor }}">
                             {{ $user->role }}
                         </span>
                     </td>

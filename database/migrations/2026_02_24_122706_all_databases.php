@@ -55,10 +55,10 @@ return new class extends Migration
             
             // Data Jurnal
             $table->text('laporan_kegiatan');
-            $table->text('kejadian_temuan')->nullable();
-            $table->string('lembur')->nullable();
-            $table->string('proyek_vendor')->nullable();
-            $table->string('barang_inven')->nullable();
+            $table->text('kejadian_temuan');
+            $table->string('lembur');
+            $table->text('proyek_vendor');
+            $table->text('barang_inven');
             $table->text('info_tambahan')->nullable();
             
             // Status & Approval

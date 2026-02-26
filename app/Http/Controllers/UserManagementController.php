@@ -42,7 +42,7 @@ class UserManagementController extends Controller
 
         SystemLog::recordLog([
             'user_id'   => auth()->id(),
-            'aksi'      => 'Add User',
+            'aksi'      => 'Create',
             'deskripsi' => "Admin menambah user baru: {$user->username} ({$user->role})",
         ]);
 
@@ -79,7 +79,7 @@ class UserManagementController extends Controller
 
         SystemLog::recordLog([
             'user_id'   => auth()->id(),
-            'aksi'      => 'Edit User',
+            'aksi'      => 'Update',
             'deskripsi' => "Admin mengubah data user: {$user->username}",
         ]);
 
@@ -100,7 +100,7 @@ class UserManagementController extends Controller
 
         SystemLog::recordLog([
             'user_id'   => auth()->id(),
-            'aksi'      => 'Delete User',
+            'aksi'      => 'Delete',
             'deskripsi' => "Admin menghapus user: {$nama}",
         ]);
 
