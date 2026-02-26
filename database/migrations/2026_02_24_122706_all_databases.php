@@ -51,7 +51,7 @@ return new class extends Migration
             $table->foreignId('group_id')->constrained('groups');
             $table->foreignId('lokasi_id')->constrained('locations');
             $table->foreignId('shift_id')->constrained('shifts');
-            $table->foreignId('next_shift')->constrained('shifts');
+            $table->foreignId('next_shift')->constrained('groups');
             
             // Data Jurnal
             $table->text('laporan_kegiatan');

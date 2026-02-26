@@ -8,6 +8,7 @@ use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\GroupManagementController;
 use App\Http\Controllers\SystemLogController;
 use App\Http\Controllers\SatpamController;
+use App\Http\Controllers\JournalController;
 
 // Halaman Login (Hanya bisa diakses jika belum login/guest)
 Route::middleware('guest')->group(function () {
@@ -60,4 +61,13 @@ Route::middleware('auth')->group(function () {
 
     // Dashboard Satpam
     Route::get('/satpam/dashboard', [SatpamController::class, 'dashboard'])->name('satpam.dashboard');
+
+    // Journal Submission
+    Route::get('/satpam/journal-submission', [JournalController::class, 'create'])->name('satpam.journal-submission');
+    Route::post('/satpam/journal-submission', [JournalController::class, 'submitJournal'])->name('satpam.journal.submit');
+
+    // Log History (placeholder)
+    Route::get('/satpam/log-history', function () {
+        return "Halaman Log History (coming soon)";
+    })->name('satpam.log-history');
 });

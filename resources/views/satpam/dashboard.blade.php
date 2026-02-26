@@ -83,11 +83,11 @@
                     @forelse($recent_submissions as $submission)
                         <tr class="border-b border-gray-100 hover:bg-gray-50">
                             <td class="py-3 px-4 text-md text-gray-600">{{ \Carbon\Carbon::parse($submission->tanggal)->format('d M Y') }}</td>
-                            <td class="py-3 px-4 text-md font-bold text-gray-800">{{ $submission->user->nama ?? '-' }}</td>
+                            <td class="py-3 px-4 text-md text-gray-800">{{ $submission->user->nama ?? '-' }}</td>
                             <td class="py-3 px-4 text-md text-gray-600">{{ $submission->group->nama_grup ?? '-' }}</td>
                             <td class="py-3 px-4 text-md text-gray-600">{{ $submission->location->nama_lokasi ?? '-' }}</td>
                             <td class="py-3 px-4 text-md text-gray-600">{{ $submission->shift->nama_shift ?? '-' }}</td>
-                            <td class="py-3 px-4 text-md text-gray-600">{{ $submission->nextShift->nama_shift ?? '-' }}</td>
+                            <td class="py-3 px-4 text-md text-gray-600">{{ $submission->nextShift->nama_grup ?? '-' }}</td>
                             <td class="py-3 px-4">
                                 @if($submission->status === 'Pending')
                                     <span class="px-3 py-1 bg-gray-100 text-gray-700 text-md font-bold rounded-full">{{ $submission->status }}</span>

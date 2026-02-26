@@ -22,7 +22,7 @@ class Journal extends Model
     }
 
     public function nextShift() {
-        return $this->belongsTo(Shift::class, 'next_shift');
+        return $this->belongsTo(Group::class, 'next_shift');
     }
 
     public function user() { return $this->belongsTo(User::class); }
