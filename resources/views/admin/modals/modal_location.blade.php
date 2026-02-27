@@ -8,12 +8,36 @@
 
         {{-- Title berubah sesuai mode --}}
         <h3 id="modalLocTitle" class="text-xl font-bold mb-5 text-gray-800">Add Location</h3>
+        
+        @if ($errors->any() && (old('nama_lokasi') || old('alamat_lokasi') || old('location_id')))
+            <div id="alertError" class="mb-4 p-3 bg-red-50 border-l-4 border-red-500 text-red-700 text-xs rounded relative shadow-sm">
+                <div class="flex justify-between items-start">
+                    <div>
+                        @foreach ($errors->all() as $error)
+                            <p>{{ $error }}</p>
+                        @endforeach
+                    </div>
+                    <button type="button" onclick="this.parentElement.parentElement.remove()" class="text-red-500 hover:text-red-800">
+                        <i class="bi bi-x-lg text-sm"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <script>
+                setTimeout(() => {
+                    const modal = document.getElementById('modalLoc');
+                    if (!modal) return;
+                    const alert = modal.querySelector('#alertError');
+                    if (alert) alert.remove();
+                }, 3000);
+            </script>
+        @endif
 
         {{-- Form action & _method berubah sesuai mode --}}
         <form id="formLoc" action="" method="POST">
             @csrf
-            {{-- Spoof method: PUT untuk edit, POST untuk add --}}
             <input type="hidden" name="_method" id="methodLoc" value="POST">
+            <input type="hidden" name="location_id" id="inputLocId" value="{{ old('location_id') }}">
 
             <div class="mb-3">
                 <label class="block text-sm font-medium text-gray-700 mb-1">
@@ -23,6 +47,7 @@
                     type="text"
                     id="inputLocName"
                     name="nama_lokasi"
+                    value="{{ old('nama_lokasi') }}"
                     placeholder="Masukkan nama lokasi"
                     class="w-full p-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                     required>
@@ -38,7 +63,7 @@
                     placeholder="Masukkan alamat lokasi"
                     required
                     class="w-full p-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                    rows="3"></textarea>
+                    rows="3">{{ old('alamat_lokasi') }}</textarea>
             </div>
 
             <div class="flex justify-end gap-2">

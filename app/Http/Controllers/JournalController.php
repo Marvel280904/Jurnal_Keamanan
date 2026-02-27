@@ -11,6 +11,7 @@ use App\Models\Group;
 use App\Models\Journal;
 use App\Models\Upload;
 use Carbon\Carbon;
+use Illuminate\Database\QueryException;
 
 class JournalController extends Controller
 {
@@ -18,7 +19,10 @@ class JournalController extends Controller
     {
         $locations = Location::where('status', 'Active')->get();
         $shifts    = Shift::where('status', 'Active')->get();
-        $groups    = Group::all();
+        $user      = Auth::user();
+        
+        // Ambil semua group selain group user yang sedang login
+        $groups    = Group::where('id', '!=', $user->group_id)->get();
 
         return view('satpam.journal_submission', compact('locations', 'shifts', 'groups'));
     }
@@ -31,24 +35,29 @@ class JournalController extends Controller
             'tanggal'           => 'required|date',
             'next_shift'        => 'required|exists:groups,id',
             'laporan_kegiatan'  => 'required|string',
-            'kejadian_temuan'   => 'nullable|string',
-            'lembur'            => 'nullable|string|max:100',
-            'proyek_vendor'     => 'nullable|string',
-            'barang_inven'      => 'nullable|string',
+            'kejadian_temuan'   => 'required|string',
+            'lembur'            => 'required|string|max:255',
+            'proyek_vendor'     => 'required|string',
+            'barang_inven'      => 'required|string',
             'info_tambahan'     => 'nullable|string',
             'files.*'           => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:10240',
         ], [
-            'lokasi_id.required'        => 'Lokasi wajib dipilih.',
-            'lokasi_id.exists'          => 'Lokasi tidak valid.',
-            'shift_id.required'         => 'Shift saat ini wajib dipilih.',
-            'shift_id.exists'           => 'Shift saat ini tidak valid.',
-            'tanggal.required'          => 'Tanggal wajib diisi.',
-            'tanggal.date'              => 'Format tanggal tidak valid.',
-            'next_shift.required'       => 'Shift berikutnya (Grup) wajib dipilih.',
-            'next_shift.exists'         => 'Grup shift berikutnya tidak valid.',
-            'laporan_kegiatan.required' => 'Laporan Kegiatan wajib diisi.',
-            'files.*.mimes'             => 'Format file tidak didukung. Gunakan PDF, DOC, DOCX, JPG, atau PNG.',
-            'files.*.max'               => 'Ukuran file maksimal 10MB.',
+            'lokasi_id.required'        => 'Lokasi wajib dipilih!',
+            'lokasi_id.exists'          => 'Lokasi tidak valid!',
+            'shift_id.required'         => 'Shift saat ini wajib dipilih!',
+            'shift_id.exists'           => 'Shift saat ini tidak valid!',
+            'tanggal.required'          => 'Tanggal wajib diisi!',
+            'tanggal.date'              => 'Format tanggal tidak valid!',
+            'next_shift.required'       => 'Shift berikutnya (Grup) wajib dipilih!',
+            'next_shift.exists'         => 'Grup shift berikutnya tidak valid!',
+            'laporan_kegiatan.required' => 'Laporan Kegiatan wajib diisi!',
+            'kejadian_temuan.required'  => 'Kejadian/Temuan wajib diisi!',
+            'lembur.required'           => 'Lembur wajib diisi!',
+            'lembur.max'                => 'Lembur maksimal 255 karakter!',
+            'proyek_vendor.required'    => 'Proyek/Vendor wajib diisi!',
+            'barang_inven.required'     => 'Barang Inven wajib diisi!',
+            'files.*.mimes'             => 'Format file tidak didukung. Gunakan PDF, DOC, DOCX, JPG, atau PNG!',
+            'files.*.max'               => 'Ukuran file maksimal 10MB!',
         ]);
 
         $user     = Auth::user();
@@ -75,10 +84,10 @@ class JournalController extends Controller
                 'shift_id'         => $request->shift_id,
                 'next_shift'       => $request->next_shift,
                 'laporan_kegiatan' => $request->laporan_kegiatan,
-                'kejadian_temuan'  => $request->kejadian_temuan ?? '',
-                'lembur'           => $request->lembur ?? '-',
-                'proyek_vendor'    => $request->proyek_vendor ?? '',
-                'barang_inven'     => $request->barang_inven ?? '',
+                'kejadian_temuan'  => $request->kejadian_temuan,
+                'lembur'           => $request->lembur,
+                'proyek_vendor'    => $request->proyek_vendor,
+                'barang_inven'     => $request->barang_inven,
                 'info_tambahan'    => $request->info_tambahan,
                 'status'           => 'Pending',
             ]);

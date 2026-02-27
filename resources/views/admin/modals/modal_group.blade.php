@@ -10,7 +10,7 @@
 
         <h3 id="modalGroupTitle" class="text-xl font-bold mb-5 text-gray-800">Add Group</h3>
 
-        @if ($errors->any())
+        @if ($errors->any() && (old('nama_grup') || old('satpam_ids')))
             <div id="alertError" class="mb-4 p-3 bg-red-50 border-l-4 border-red-500 text-red-700 text-xs rounded relative shadow-sm">
                 <div class="flex justify-between items-start">
                     @foreach ($errors->all() as $error)
@@ -45,6 +45,7 @@
                     type="text"
                     id="inputNamaGrup"
                     name="nama_grup"
+                    value="{{ old('nama_grup') }}"
                     placeholder="Masukkan nama grup"
                     class="w-full p-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                     required>
@@ -62,6 +63,7 @@
                                 type="checkbox" 
                                 name="satpam_ids[]" 
                                 value="{{ $satpam->id }}" 
+                                {{ in_array($satpam->id, old('satpam_ids', [])) ? 'checked' : '' }}
                                 class="satpam-checkbox w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500">
                             <span class="text-sm text-gray-800 font-medium">{{ $satpam->nama }}</span>
                         </label>

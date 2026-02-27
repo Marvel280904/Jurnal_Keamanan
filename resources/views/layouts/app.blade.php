@@ -45,7 +45,7 @@
 
             <div class="flex items-center gap-2">
                 <div class="w-8 h-8 rounded-full bg-blue-200 text-blue-600 font-bold flex items-center justify-center flex-shrink-0">
-                    {{ strtoupper(substr(auth()->user()->nama, 0, 2)) }}
+                    {{ collect(explode(' ', auth()->user()->nama))->map(fn($w) => strtoupper(substr($w, 0, 1)))->take(2)->implode('') }}
                 </div>
                 <div class="hidden sm:block">
                     <p class="text-sm font-bold text-gray-800 leading-tight">{{ auth()->user()->nama }}</p>

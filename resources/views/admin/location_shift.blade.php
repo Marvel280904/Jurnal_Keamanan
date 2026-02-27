@@ -224,15 +224,18 @@
         const form = document.getElementById('formLoc');
         const title = document.getElementById('modalLocTitle');
         const methodInput = document.getElementById('methodLoc');
+        const inputId = document.getElementById('inputLocId');
 
         form.reset();
+
+        document.getElementById('inputLocName').value = name;
+        document.getElementById('inputLocAddress').value = address;
+        if (inputId) inputId.value = id || '';
 
         if (id) {
             title.innerText = 'Edit Location';
             form.action = `/admin/location/${id}`;
             methodInput.value = 'PUT';
-            document.getElementById('inputLocName').value = name;
-            document.getElementById('inputLocAddress').value = address;
         } else {
             title.innerText = 'Add Location';
             form.action = "{{ route('admin.location.store') }}";
@@ -255,16 +258,19 @@
         const form = document.getElementById('formShift');
         const title = document.getElementById('modalShiftTitle');
         const methodInput = document.getElementById('methodShift');
+        const inputId = document.getElementById('inputShiftId');
 
         form.reset();
+
+        document.getElementById('inputShiftName').value = name;
+        document.getElementById('inputShiftStart').value = start;
+        document.getElementById('inputShiftEnd').value = end;
+        if (inputId) inputId.value = id || '';
 
         if (id) {
             title.innerText = 'Edit Shift';
             form.action = `/admin/shift/${id}`;
             methodInput.value = 'PUT';
-            document.getElementById('inputShiftName').value = name;
-            document.getElementById('inputShiftStart').value = start;
-            document.getElementById('inputShiftEnd').value = end;
         } else {
             title.innerText = 'Add Shift';
             form.action = "{{ route('admin.shift.store') }}";
@@ -308,18 +314,19 @@
     // Auto-open modal Loc/Shift jika ada error validasi
     @if($errors->any())
         window.onload = () => {
-            @if(session('error_location') || old('nama_lokasi'))
+            if ('{{ old('nama_lokasi') }}' || '{{ old('alamat_lokasi') }}' || '{{ old('location_id') }}') {
                 const locId = '{{ old('location_id', '') }}';
                 const locName = `{!! addslashes(old('nama_lokasi', '')) !!}`;
                 const locAddress = `{!! addslashes(old('alamat_lokasi', '')) !!}`;
                 openModalLoc(locId ? locId : null, locName, locAddress);
-            @elseif(session('error_shift') || old('nama_shift'))
+            } else if ('{{ old('nama_shift') }}' || '{{ old('mulai_shift') }}' || '{{ old('shift_id') }}') {
                 const shiftId = '{{ old('shift_id', '') }}';
                 const shiftName = `{!! addslashes(old('nama_shift', '')) !!}`;
                 const shiftStart = '{{ old('mulai_shift', '') }}';
                 const shiftEnd = '{{ old('selesai_shift', '') }}';
                 openModalShift(shiftId ? shiftId : null, shiftName, shiftStart, shiftEnd);
-            @endif
+                switchTab('shifts');
+            }
         };
     @endif
 </script>

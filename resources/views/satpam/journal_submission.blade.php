@@ -73,9 +73,6 @@
                                 <i class="bi bi-chevron-down text-gray-400 text-xs"></i>
                             </div>
                         </div>
-                        <!-- @error('lokasi_id')
-                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
-                        @enderror -->
                     </div>
 
                     {{-- Date --}}
@@ -87,9 +84,6 @@
                             value="{{ old('tanggal', date('Y-m-d')) }}"
                             class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition
                             {{ $errors->has('tanggal') ? 'border-red-400 bg-red-50' : '' }}">
-                        <!-- @error('tanggal')
-                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
-                        @enderror -->
                     </div>
 
                     {{-- Current Shift --}}
@@ -112,9 +106,6 @@
                                 <i class="bi bi-chevron-down text-gray-400 text-xs"></i>
                             </div>
                         </div>
-                        <!-- @error('shift_id')
-                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
-                        @enderror -->
                     </div>
 
                     {{-- Next Shift --}}
@@ -137,9 +128,6 @@
                                 <i class="bi bi-chevron-down text-gray-400 text-xs"></i>
                             </div>
                         </div>
-                        <!-- @error('next_shift')
-                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
-                        @enderror -->
                     </div>
                 </div>
             </div>
@@ -162,9 +150,6 @@
                         placeholder="Deskripsikan kegiatan operasional yang dilakukan..."
                         class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition resize-none
                         {{ $errors->has('laporan_kegiatan') ? 'border-red-400 bg-red-50' : '' }}">{{ old('laporan_kegiatan') }}</textarea>
-                    @error('laporan_kegiatan')
-                        <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
-                    @enderror
                 </div>
 
                 {{-- Laporan Kejadian --}}

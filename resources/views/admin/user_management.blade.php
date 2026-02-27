@@ -86,14 +86,15 @@
 
         form.reset();
 
+        document.getElementById('inputNama').value = nama;
+        document.getElementById('inputUsername').value = username;
+        document.getElementById('inputRole').value = role;
+
         if (id) {
             title.innerText = 'Edit User';
             form.action = `/admin/user/${id}`;
             methodInput.value = 'PUT';
             if (userIdInput) userIdInput.value = id;
-            document.getElementById('inputNama').value = nama;
-            document.getElementById('inputUsername').value = username;
-            document.getElementById('inputRole').value = role;
             passNote.classList.remove('hidden');
             passReq.required = false;
         } else {

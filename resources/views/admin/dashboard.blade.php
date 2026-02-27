@@ -112,7 +112,7 @@
     @include('admin.modals.modal_group')
 
     <script>
-        // Modal User (Add/Edit) - same as User Management page
+        // Modal User (Add/Edit)
         function openModalUser(id = null, nama = '', username = '', role = 'Admin') {
             const modal = document.getElementById('modalUser');
             const form = document.getElementById('formUser');
@@ -123,6 +123,10 @@
             const userIdInput = document.getElementById('inputUserId');
 
             form.reset();
+
+            document.getElementById('inputNama').value = nama;
+            document.getElementById('inputUsername').value = username;
+            document.getElementById('inputRole').value = role;
 
             if (!id) {
                 title.innerText = 'Add User';
@@ -148,8 +152,13 @@
             const form = document.getElementById('formLoc');
             const title = document.getElementById('modalLocTitle');
             const methodInput = document.getElementById('methodLoc');
+            const inputId = document.getElementById('inputLocId');
 
             form.reset();
+
+            document.getElementById('inputLocName').value = name;
+            document.getElementById('inputLocAddress').value = address;
+            if (inputId) inputId.value = id || '';
 
             if (!id) {
                 title.innerText = 'Add Location';
@@ -173,8 +182,14 @@
             const form = document.getElementById('formShift');
             const title = document.getElementById('modalShiftTitle');
             const methodInput = document.getElementById('methodShift');
+            const inputId = document.getElementById('inputShiftId');
 
             form.reset();
+
+            document.getElementById('inputShiftName').value = name;
+            document.getElementById('inputShiftStart').value = start;
+            document.getElementById('inputShiftEnd').value = end;
+            if (inputId) inputId.value = id || '';
 
             if (!id) {
                 title.innerText = 'Add Shift';
@@ -203,7 +218,10 @@
             const checkboxes = document.querySelectorAll('.satpam-checkbox');
 
             form.reset();
-            checkboxes.forEach(cb => cb.checked = false);
+            checkboxes.forEach(cb => {
+                cb.checked = members.includes(cb.value);
+            });
+            if (inputNama) inputNama.value = nama;
 
             if (!id) {
                 title.innerText = 'Add Group';
@@ -224,13 +242,29 @@
         // Auto-open modal jika ada error validasi
         @if($errors->any())
             window.onload = () => {
-                // Jika error berasal dari form Group (nama_grup / satpam_ids)
-                @if($errors->has('nama_grup'))
-                    openModalGroup();
-                @else
-                    // Default: anggap error berasal dari form User
-                    openModalUser();
-                @endif
+                if ('{{ old('nama_grup') }}' || @json(old('satpam_ids')) || '{{ old('group_id') }}') {
+                    const id = '{{ old('group_id', '') }}';
+                    const nama = `{!! addslashes(old('nama_grup', '')) !!}`;
+                    const satpamIds = @json(old('satpam_ids', []));
+                    openModalGroup(id ? id : null, nama, satpamIds.map(String));
+                } else if ('{{ old('nama_lokasi') }}' || '{{ old('alamat_lokasi') }}' || '{{ old('location_id') }}') {
+                    const locId = '{{ old('location_id', '') }}';
+                    const locName = `{!! addslashes(old('nama_lokasi', '')) !!}`;
+                    const locAddress = `{!! addslashes(old('alamat_lokasi', '')) !!}`;
+                    openModalLoc(locId ? locId : null, locName, locAddress);
+                } else if ('{{ old('nama_shift') }}' || '{{ old('mulai_shift') }}' || '{{ old('shift_id') }}') {
+                    const shiftId = '{{ old('shift_id', '') }}';
+                    const shiftName = `{!! addslashes(old('nama_shift', '')) !!}`;
+                    const shiftStart = '{{ old('mulai_shift', '') }}';
+                    const shiftEnd = '{{ old('selesai_shift', '') }}';
+                    openModalShift(shiftId ? shiftId : null, shiftName, shiftStart, shiftEnd);
+                } else {
+                    const userId = '{{ old('user_id', '') }}';
+                    const nama = `{!! addslashes(old('nama', '')) !!}`;
+                    const username = `{!! addslashes(old('username', '')) !!}`;
+                    const role = '{{ old('role', 'Admin') }}';
+                    openModalUser(userId ? userId : null, nama, username, role);
+                }
             };
         @endif
     </script>

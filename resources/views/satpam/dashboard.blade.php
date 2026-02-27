@@ -49,7 +49,7 @@
             @forelse($my_group as $member)
                 <div class="flex items-center gap-3 bg-gray-50 px-4 py-3 rounded-xl border border-gray-100 min-w-[200px]">
                     <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 font-bold text-sm flex items-center justify-center flex-shrink-0">
-                        {{ strtoupper(substr($member->nama, 0, 2)) }}
+                        {{ collect(explode(' ', $member->nama))->map(fn($w) => strtoupper(substr($w, 0, 1)))->take(2)->implode('') }}
                     </div>
                     <div>
                         <p class="text-sm font-bold text-gray-800">{{ $member->nama }}</p>

@@ -25,7 +25,11 @@ class LocationShiftController extends Controller
     {
         $request->validate([
             'nama_lokasi'   => 'required|string|max:255',
-            'alamat_lokasi' => 'nullable|string',
+            'alamat_lokasi' => 'required|string',
+        ], [
+            'nama_lokasi.required'   => 'Nama lokasi wajib diisi.',
+            'nama_lokasi.max'   => 'Nama lokasi maksimal 255 karakter.',
+            'alamat_lokasi.required' => 'Alamat lokasi wajib diisi.',
         ]);
 
         $location = Location::create([
@@ -46,7 +50,11 @@ class LocationShiftController extends Controller
     {
         $request->validate([
             'nama_lokasi'   => 'required|string|max:255',
-            'alamat_lokasi' => 'nullable|string',
+            'alamat_lokasi' => 'required|string',
+        ], [
+            'nama_lokasi.required'   => 'Nama lokasi wajib diisi.',
+            'nama_lokasi.max'   => 'Nama lokasi maksimal 255 karakter.',
+            'alamat_lokasi.required' => 'Alamat lokasi wajib diisi.',
         ]);
 
         $location->update([
@@ -99,6 +107,11 @@ class LocationShiftController extends Controller
             'nama_shift'    => 'required|string|max:255',
             'mulai_shift'   => 'required',
             'selesai_shift' => 'required',
+        ], [
+            'nama_shift.required'    => 'Nama shift wajib diisi.',
+            'nama_shift.max'   => 'Nama shift maksimal 255 karakter.',
+            'mulai_shift.required'   => 'Jam mulai shift wajib diisi.',
+            'selesai_shift.required' => 'Jam selesai shift wajib diisi.',
         ]);
 
         $shift = Shift::create([
@@ -122,6 +135,11 @@ class LocationShiftController extends Controller
             'nama_shift'    => 'required|string|max:255',
             'mulai_shift'   => 'required',
             'selesai_shift' => 'required',
+        ], [
+            'nama_shift.required'    => 'Nama shift wajib diisi.',
+            'nama_shift.max'   => 'Nama shift maksimal 255 karakter.',
+            'mulai_shift.required'   => 'Jam mulai shift wajib diisi.',
+            'selesai_shift.required' => 'Jam selesai shift wajib diisi.',
         ]);
 
         $shift->update([

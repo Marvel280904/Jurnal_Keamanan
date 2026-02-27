@@ -29,8 +29,10 @@ class GroupManagementController extends Controller
             'satpam_ids' => 'nullable|array',
             'satpam_ids.*' => 'exists:users,id'
         ], [
-            // Message error
+            'nama_grup.required' => 'Nama Group wajib diisi!',
+            'nama_grup.max' => 'Nama Group maksimal 255 karakter!',
             'nama_grup.unique' => 'Nama Group sudah ada!',
+            'satpam_ids.exists' => 'Satpam tidak valid!',
         ]);
 
         $group = Group::create([
@@ -60,8 +62,10 @@ class GroupManagementController extends Controller
             'satpam_ids' => 'nullable|array',
             'satpam_ids.*' => 'exists:users,id'
         ], [
-            // Message error
+            'nama_grup.required' => 'Nama Group wajib diisi!',
+            'nama_grup.max' => 'Nama Group maksimal 255 karakter!',
             'nama_grup.unique' => 'Nama Group sudah ada!',
+            'satpam_ids.exists' => 'Satpam tidak valid!',
         ]);
 
         $group->update([

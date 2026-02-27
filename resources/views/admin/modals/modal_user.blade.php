@@ -5,7 +5,7 @@
             <h3 id="modalTitle" class="text-xl font-bold text-gray-800">Add User</h3>
         </div>
 
-        @if ($errors->any())
+        @if ($errors->any() && (old('nama') || old('username') || old('role')))
             <div id="alertError" class="mb-4 p-3 bg-red-50 border-l-4 border-red-500 text-red-700 text-xs rounded relative shadow-sm">
                 <div class="flex justify-between items-start">
                     @foreach ($errors->all() as $error)
@@ -34,12 +34,12 @@
 
             <div class="mb-3">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap <span class="text-red-500">*</span></label>
-                <input type="text" name="nama" id="inputNama" placeholder="Masukan Nama Lengkap" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm" required>
+                <input type="text" name="nama" id="inputNama" value="{{ old('nama') }}" placeholder="Masukan Nama Lengkap" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm" required>
             </div>
 
             <div class="mb-3">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Username <span class="text-red-500">*</span></label>
-                <input type="text" name="username" id="inputUsername" placeholder="Masukan Username" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm" required>
+                <input type="text" name="username" id="inputUsername" value="{{ old('username') }}" placeholder="Masukan Username" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm" required>
             </div>
 
             <div class="mb-3">
@@ -53,9 +53,9 @@
             <div class="mb-5">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Role <span class="text-red-500">*</span></label>
                 <select name="role" id="inputRole" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm" required>
-                    <option value="Admin">Admin</option>
-                    <option value="Satpam">Satpam</option>
-                    <option value="PGA">PGA</option>
+                    <option value="Admin" {{ old('role') == 'Admin' ? 'selected' : '' }}>Admin</option>
+                    <option value="Satpam" {{ old('role') == 'Satpam' ? 'selected' : '' }}>Satpam</option>
+                    <option value="PGA" {{ old('role') == 'PGA' ? 'selected' : '' }}>PGA</option>
                 </select>
             </div>
 

@@ -27,9 +27,14 @@ class UserManagementController extends Controller
             'password' => 'required|string|min:6',
             'role'     => 'required|in:Admin,Satpam,PGA',
         ], [
-            // Message error
+            'nama.required' => 'Nama wajib diisi!',
+            'nama.max' => 'Nama maksimal 255 karakter!',
+            'username.required' => 'Username wajib diisi!',
+            'username.max' => 'Username maksimal 255 karakter!',
             'username.unique' => 'Username sudah ada!',
             'password.min' => 'Password minimal 6 karakter!',
+            'role.required' => 'Role wajib diisi!',
+            'role.in' => 'Role tidak valid!',
         ]);
 
         $user = User::create([
@@ -59,9 +64,14 @@ class UserManagementController extends Controller
             'password' => 'nullable|string|min:6',
             'role'     => 'required|in:Admin,Satpam,PGA',
         ], [
-            // Message error
+            'nama.required' => 'Nama wajib diisi!',
+            'nama.max' => 'Nama maksimal 255 karakter!',
+            'username.required' => 'Username wajib diisi!',
+            'username.max' => 'Username maksimal 255 karakter!',
             'username.unique' => 'Username sudah ada!',
             'password.min' => 'Password minimal 6 karakter!',
+            'role.required' => 'Role wajib diisi!',
+            'role.in' => 'Role tidak valid!',
         ]);
 
         $data = [

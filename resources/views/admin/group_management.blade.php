@@ -127,20 +127,16 @@
         const checkboxes = document.querySelectorAll('.satpam-checkbox');
 
         form.reset();
-        checkboxes.forEach(cb => cb.checked = false);
+        checkboxes.forEach(cb => {
+            cb.checked = members.includes(cb.value);
+        });
+        inputNama.value = nama;
 
         if (id) {
             title.innerText = 'Edit Group';
             form.action = `/admin/group/${id}`;
             methodInput.value = 'PUT';
-            inputNama.value = nama;
             if (groupIdInput) groupIdInput.value = id;
-            
-            checkboxes.forEach(cb => {
-                if (members.includes(cb.value)) {
-                    cb.checked = true;
-                }
-            });
         } else {
             title.innerText = 'Add Group';
             form.action = "{{ route('admin.group.store') }}";

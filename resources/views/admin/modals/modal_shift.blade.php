@@ -9,11 +9,35 @@
         {{-- Title berubah sesuai mode --}}
         <h3 id="modalShiftTitle" class="text-xl font-bold mb-5 text-gray-800">Add Shift</h3>
 
+        @if ($errors->any() && (old('nama_shift') || old('mulai_shift') || old('shift_id')))
+            <div id="alertError" class="mb-4 p-3 bg-red-50 border-l-4 border-red-500 text-red-700 text-xs rounded relative shadow-sm">
+                <div class="flex justify-between items-start">
+                    <div>
+                        @foreach ($errors->all() as $error)
+                            <p>{{ $error }}</p>
+                        @endforeach
+                    </div>
+                    <button type="button" onclick="this.parentElement.parentElement.remove()" class="text-red-500 hover:text-red-800">
+                        <i class="bi bi-x-lg text-sm"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <script>
+                setTimeout(() => {
+                    const modal = document.getElementById('modalShift');
+                    if (!modal) return;
+                    const alert = modal.querySelector('#alertError');
+                    if (alert) alert.remove();
+                }, 3000);
+            </script>
+        @endif
+
         {{-- Form action & _method berubah sesuai mode --}}
         <form id="formShift" action="" method="POST">
             @csrf
-            {{-- Spoof method: PUT untuk edit, POST untuk add --}}
             <input type="hidden" name="_method" id="methodShift" value="POST">
+            <input type="hidden" name="shift_id" id="inputShiftId" value="{{ old('shift_id') }}">
 
             <div class="mb-3">
                 <label class="block text-sm font-medium text-gray-700 mb-1">
@@ -23,6 +47,7 @@
                     type="text"
                     id="inputShiftName"
                     name="nama_shift"
+                    value="{{ old('nama_shift') }}"
                     placeholder="Contoh: Shift Pagi"
                     class="w-full p-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                     required>
@@ -37,6 +62,7 @@
                         type="time"
                         id="inputShiftStart"
                         name="mulai_shift"
+                        value="{{ old('mulai_shift') }}"
                         class="w-full p-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                         required>
                 </div>
@@ -48,6 +74,7 @@
                         type="time"
                         id="inputShiftEnd"
                         name="selesai_shift"
+                        value="{{ old('selesai_shift') }}"
                         class="w-full p-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                         required>
                 </div>
