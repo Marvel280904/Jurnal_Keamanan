@@ -70,8 +70,8 @@ return new class extends Migration
             $table->timestamps();
 
             // UNIQUE CONSTRAINT untuk mencegah race condition
-            // Memastikan 1 grup hanya bisa punya 1 jurnal per tanggal
-            $table->unique(['group_id', 'tanggal'], 'unique_group_journal');
+            // Memastikan 1 grup hanya bisa punya 1 jurnal per tanggal,lokasi, dan shift
+            $table->unique(['group_id', 'tanggal', 'lokasi_id', 'shift_id'], 'unique_journal_composite');
         });
 
         Schema::create('uploads', function (Blueprint $table) {

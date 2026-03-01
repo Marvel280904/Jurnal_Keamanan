@@ -34,4 +34,16 @@ class User extends Authenticatable
     public function journals() {
         return $this->hasMany(Journal::class);
     }
+
+    public function updatedJournals() {
+        return $this->hasMany(Journal::class, 'updated_by');
+    }
+
+    public function handoverJournals() {
+        return $this->hasMany(Journal::class, 'handover_by');
+    }
+
+    public function approvedJournals() {
+        return $this->hasMany(Journal::class, 'approved_by');
+    }
 }

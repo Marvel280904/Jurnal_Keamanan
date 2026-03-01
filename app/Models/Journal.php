@@ -29,6 +29,10 @@ class Journal extends Model
     public function group() { return $this->belongsTo(Group::class); }
     public function uploads() { return $this->hasMany(Upload::class); }
 
+    public function updater() { return $this->belongsTo(User::class, 'updated_by'); }
+    public function handover() { return $this->belongsTo(User::class, 'handover_by'); }
+    public function approver() { return $this->belongsTo(User::class, 'approved_by'); }
+
     // Methods
     public static function viewJournal() {
         return self::all();

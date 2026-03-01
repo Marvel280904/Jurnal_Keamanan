@@ -22,7 +22,8 @@ class Upload extends Model
     }
 
     public static function uploadFile($journalId, $file) {
-        $path = $file->store('public/uploads/journals');
+        // L11/12 default disk 'local' maps to private. Use 'public' disk to make files accessible via symlink.
+        $path = $file->store('uploads/journals', 'public');
         
         return self::create([
             'journal_id' => $journalId,

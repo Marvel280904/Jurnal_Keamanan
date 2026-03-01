@@ -9,6 +9,7 @@ use App\Http\Controllers\GroupManagementController;
 use App\Http\Controllers\SystemLogController;
 use App\Http\Controllers\SatpamController;
 use App\Http\Controllers\JournalController;
+use App\Http\Controllers\LogHistoryController;
 
 // Halaman Login (Hanya bisa diakses jika belum login/guest)
 Route::middleware(['guest', 'prevent-back-history'])->group(function () {
@@ -71,10 +72,15 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
         Route::get('/satpam/journal-submission', [JournalController::class, 'create'])->name('satpam.journal-submission');
         Route::post('/satpam/journal-submission', [JournalController::class, 'submitJournal'])->name('satpam.journal.submit');
 
-        // Log History (placeholder)
-        Route::get('/satpam/log-history', function () {
-            return "Halaman Log History (coming soon)";
-        })->name('satpam.log-history');
+        // Log History
+        Route::get('/satpam/log-history', [LogHistoryController::class, 'viewJournal'])->name('satpam.log-history');
+
+        // Journal Actions
+        Route::get('/satpam/journal/view/{id}', [JournalController::class, 'viewJournalDetail'])->name('satpam.journal.view');
+        Route::get('/satpam/journal/edit/{journal}', [JournalController::class, 'edit'])->name('satpam.journal.edit');
+        Route::put('/satpam/journal/edit/{journal}', [JournalController::class, 'update'])->name('satpam.journal.update');
+        Route::post('/satpam/journal/handover/{id}', [JournalController::class, 'handoverApproval'])->name('satpam.journal.handover');
+        Route::get('/satpam/journal/download/{id}', [JournalController::class, 'downloadPDF'])->name('satpam.journal.download');
     });
 
     // ==========================================

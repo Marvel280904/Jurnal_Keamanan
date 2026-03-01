@@ -1,0 +1,167 @@
+@extends('layouts.app')
+@section('title', 'Log History')
+
+@section('content')
+<div class="space-y-6">
+    <div class="flex justify-between items-center">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-800">Log History</h1>
+            <p class="text-gray-500">View your journal submission history</p>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <h2 class="text-lg font-bold text-gray-800 mb-4">All Journal Submissions</h2>
+        
+        <!-- Search & Filter Tab -->
+        <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+            <div class="relative w-full md:w-1/2">
+                <i class="bi bi-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                <input type="text" id="searchInput" placeholder="Search by user, location, or group..." class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+            </div>
+            
+            <select id="statusFilter" class="w-full md:w-48 pl-4 pr-8 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white">
+                <option value="All">All Status</option>
+                <option value="Pending">Pending</option>
+                <option value="Waiting">Waiting</option>
+                <option value="Approved">Approved</option>
+                <option value="Rejected">Rejected</option>
+            </select>
+        </div>
+
+        <!-- Table -->
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse" id="journalTable">
+                <thead>
+                    <tr class="border-b border-gray-200">
+                        <th class="py-3 px-4 text-sm font-bold text-gray-700">Date</th>
+                        <th class="py-3 px-4 text-sm font-bold text-gray-700">User Name</th>
+                        <th class="py-3 px-4 text-sm font-bold text-gray-700">Group</th>
+                        <th class="py-3 px-4 text-sm font-bold text-gray-700">Location</th>
+                        <th class="py-3 px-4 text-sm font-bold text-gray-700">Shift</th>
+                        <th class="py-3 px-4 text-sm font-bold text-gray-700">Status</th>
+                        <th class="py-3 px-4 text-sm font-bold text-gray-700 text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($journals as $journal)
+                        <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors journal-row" 
+                            data-search="{{ strtolower($journal->user->nama ?? '') }} {{ strtolower($journal->location->nama_lokasi ?? '') }} {{ strtolower($journal->group->nama_grup ?? '') }}"
+                            data-status="{{ $journal->status }}">
+                            <td class="py-3 px-4 text-sm text-gray-600">{{ \Carbon\Carbon::parse($journal->tanggal)->format('d M Y') }}</td>
+                            <td class="py-3 px-4 text-sm text-gray-800 font-medium">{{ $journal->user->nama ?? '-' }}</td>
+                            <td class="py-3 px-4 text-sm text-gray-600">{{ $journal->group->nama_grup ?? '-' }}</td>
+                            <td class="py-3 px-4 text-sm text-gray-600">{{ $journal->location->nama_lokasi ?? '-' }}</td>
+                            <td class="py-3 px-4 text-sm text-gray-600">{{ $journal->shift->nama_shift ?? '-' }}</td>
+                            <td class="py-3 px-4 text-sm">
+                                @if($journal->status === 'Pending')
+                                    @if(auth()->user()->group_id === $journal->next_shift)
+                                        <button onclick="openHandoverModal({{ $journal->id }})" class="px-3 py-1 bg-gray-100 text-gray-700 font-bold rounded-full hover:bg-gray-200 transition">Pending (Handover)</button>
+                                    @else
+                                        <span class="px-3 py-1 bg-gray-100 text-gray-700 font-bold rounded-full">Pending</span>
+                                    @endif
+                                @elseif($journal->status === 'Waiting')
+                                    <span class="px-3 py-1 bg-yellow-100 text-yellow-700 font-bold rounded-full">Waiting</span>
+                                @elseif($journal->status === 'Approved')
+                                    <span class="px-3 py-1 bg-green-100 text-green-700 font-bold rounded-full">Approved</span>
+                                @else
+                                    <span class="px-3 py-1 bg-red-100 text-red-700 font-bold rounded-full">Rejected</span>
+                                @endif
+                            </td>
+                            <td class="py-3 px-4 text-center space-x-2">
+                                <button onclick="openViewModal({{ $journal->id }})" class="text-blue-500 hover:text-blue-700 transition" title="View Details">
+                                    <i class="bi bi-eye text-lg"></i>
+                                </button>
+                                @if($journal->status === 'Pending' && $journal->group_id === auth()->user()->group_id)
+                                <a href="{{ route('satpam.journal.edit', $journal->id) }}" class="text-yellow-500 hover:text-yellow-700 transition" title="Edit Journal">
+                                    <i class="bi bi-pencil-square text-lg"></i>
+                                </a>
+                                @endif
+                                <a href="{{ route('satpam.journal.download', $journal->id) }}" class="text-red-500 hover:text-red-700 transition" title="Download PDF">
+                                    <i class="bi bi-file-earmark-pdf text-lg"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="py-6 text-center text-gray-500">No journal submissions found.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Include Modals -->
+@include('modal_journal')
+
+<!-- Handover Confirmation Modal -->
+<div id="handoverModal" class="fixed inset-0 bg-black/50 z-[60] flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+    <div class="bg-white w-full max-w-md rounded-2xl shadow-xl transform scale-95 transition-transform duration-300 p-6 mx-4">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">Konfirmasi Serah Terima</h2>
+        <p class="text-gray-600 mb-6">Apakah Anda yakin ingin melakukan serah terima jurnal ini? Status jurnal akan berubah menjadi <span class="font-bold text-yellow-600">Waiting</span> untuk disetujui PGA.</p>
+        
+        <form id="handoverForm" method="POST" action="">
+            @csrf
+            <div class="flex justify-end gap-3 rounded-b-2xl">
+                <button type="button" onclick="closeHandoverModal()" class="px-4 py-2 text-gray-600 bg-gray-100 hover:bg-gray-200 font-medium rounded-lg transition-colors">Batal</button>
+                <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors shadow-sm focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Ya, Serah Terima</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Frontend Search & Filter Logic
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const statusFilter = document.getElementById('statusFilter');
+        const rows = document.querySelectorAll('.journal-row');
+
+        function filterTable() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const statusTerm = statusFilter.value;
+
+            rows.forEach(row => {
+                const searchableText = row.getAttribute('data-search');
+                const rowStatus = row.getAttribute('data-status');
+                
+                const matchesSearch = searchableText.includes(searchTerm);
+                const matchesStatus = (statusTerm === 'All' || rowStatus === statusTerm);
+
+                if (matchesSearch && matchesStatus) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        searchInput.addEventListener('input', filterTable);
+        statusFilter.addEventListener('change', filterTable);
+    });
+
+    // Handover Modal Logic
+    const handoverModal = document.getElementById('handoverModal');
+    const handoverForm = document.getElementById('handoverForm');
+    
+    function openHandoverModal(journalId) {
+        handoverForm.action = `/satpam/journal/handover/${journalId}`;
+        handoverModal.classList.remove('hidden');
+        setTimeout(() => {
+            handoverModal.classList.remove('opacity-0');
+            handoverModal.firstElementChild.classList.remove('scale-95');
+        }, 10);
+    }
+
+    function closeHandoverModal() {
+        handoverModal.classList.add('opacity-0');
+        handoverModal.firstElementChild.classList.add('scale-95');
+        setTimeout(() => {
+            handoverModal.classList.add('hidden');
+        }, 300);
+    }
+</script>
+@endsection
