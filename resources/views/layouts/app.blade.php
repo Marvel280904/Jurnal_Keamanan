@@ -17,9 +17,10 @@
             <button @click="sidebarOpen = !sidebarOpen" class="md:hidden text-gray-500 hover:text-blue-600 mr-1">
                 <i class="bi bi-list text-2xl"></i>
             </button>
-            <div class="w-10 h-10 rounded-xl bg-blue-900 flex items-center justify-center flex-shrink-0">
-                <i class="bi bi-shield text-white text-lg"></i>
-            </div>
+            <!-- Logo -->
+            <!-- Mini logo on mobile, full logo on desktop -->
+            <img src="{{ asset('minilogo-aica.png') }}" alt="Logo" class="h-10 w-auto block md:hidden flex-shrink-0">
+            <img src="{{ asset('logo-aica.png') }}" alt="Logo" class="h-10 w-auto hidden md:block flex-shrink-0">
             <div>
                 <p class="font-bold text-base text-gray-800 leading-tight">
                     @if(auth()->user()->role === 'Admin')
@@ -27,7 +28,7 @@
                     @elseif(auth()->user()->role === 'Satpam')
                         Satpam Dashboard
                     @else
-                        Dashboard
+                        PGA Dashboard
                     @endif
                 </p>
                 <p class="text-xs text-gray-500 hidden sm:block">Sistem Jurnal Operasional Keamanan</p>

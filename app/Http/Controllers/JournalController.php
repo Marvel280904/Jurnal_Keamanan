@@ -176,6 +176,8 @@ class JournalController extends Controller
             return redirect()->back()->with('error', 'Anda tidak dapat mengedit jurnal ini.');
         }
 
+        $journal->load('uploads'); // Load existing uploads
+
         $locations = Location::where('status', 'Active')->get();
         $shifts    = Shift::where('status', 'Active')->get();
         $user      = Auth::user();
@@ -251,10 +253,21 @@ class JournalController extends Controller
                 'proyek_vendor'    => $request->proyek_vendor,
                 'barang_inven'     => $request->barang_inven,
                 'info_tambahan'    => $request->info_tambahan,
-                'updated_by'       => Auth::id(), // Set updated_by here
+                'updated_by'       => Auth::id(),
             ]);
 
-            // Note: For now, we just add new files. In a real system you'd handle file deletion too.
+            // Handle deletions of existing files flagged by user
+            if ($request->filled('delete_upload_ids')) {
+                $deleteIds = explode(',', $request->delete_upload_ids);
+                $uploadsToDelete = \App\Models\Upload::whereIn('id', $deleteIds)
+                    ->where('journal_id', $journal->id)
+                    ->get();
+                foreach ($uploadsToDelete as $upload) {
+                    $upload->deleteFile();
+                }
+            }
+
+            // Add newly uploaded files
             if ($request->hasFile('files')) {
                 foreach ($request->file('files') as $file) {
                     Upload::uploadFile($journal->id, $file);
@@ -295,9 +308,10 @@ class JournalController extends Controller
         $nextShiftMembers = \App\Models\User::where('group_id', $journal->next_shift)->pluck('nama')->toArray();
 
         $data = [
-            'journal' => $journal,
+            'journal'             => $journal,
             'currentGroupMembers' => implode(', ', $currentGroupMembers),
-            'nextShiftMembers' => implode(', ', $nextShiftMembers)
+            'nextShiftMembers'    => implode(', ', $nextShiftMembers),
+            'uploads'             => $journal->uploads()->get(),
         ];
 
         // Ensure you create resources/views/pdf_journal.blade.php

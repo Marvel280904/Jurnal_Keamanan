@@ -97,6 +97,9 @@
             if (userIdInput) userIdInput.value = id;
             passNote.classList.remove('hidden');
             passReq.required = false;
+            // Hide asterisk and hint in edit mode (password not required)
+            document.getElementById('passwordRequired').classList.add('hidden');
+            document.getElementById('passwordMinHint').classList.add('hidden');
         } else {
             title.innerText = 'Add User';
             form.action = "{{ route('admin.user.store') }}";
@@ -104,6 +107,9 @@
             if (userIdInput) userIdInput.value = '';
             passNote.classList.add('hidden');
             passReq.required = true;
+            // Show asterisk and hint in add mode (password required)
+            document.getElementById('passwordRequired').classList.remove('hidden');
+            document.getElementById('passwordMinHint').classList.remove('hidden');
         }
 
         modal.classList.remove('hidden');

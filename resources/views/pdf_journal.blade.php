@@ -14,32 +14,32 @@
         table th { background-color: #f8fafc; color: #475569; width: 30%; font-weight: bold; }
         .content-box { border: 1px solid #e2e8f0; background-color: #f8fafc; padding: 10px; margin-bottom: 15px; min-height: 50px; border-radius: 4px; }
         .footer { margin-top: 30px; text-align: center; font-size: 10px; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 10px; }
-        .signature-table { width: 100%; border: none; margin-top: 40px; }
-        .signature-table td { border: none; text-align: center; width: 33%; }
-        .signature-line { margin-top: 50px; border-top: 1px solid #cbd5e1; display: inline-block; width: 150px; padding-top: 5px; }
+        .attachment-img { max-width: 100%; max-height: 400px; margin-bottom: 15px; display: block; }
+        .attachment-name { font-size: 10px; color: #64748b; margin-bottom: 5px; }
+        .attachment-doc { border: 1px solid #e2e8f0; padding: 8px 12px; border-radius: 4px; background: #f8fafc; font-size: 11px; color: #475569; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>Laporan Jurnal Keamanan Operasional</h1>
-        <p>Generated on: {{ \Carbon\Carbon::now()->format('d M Y H:i') }} | Status: <strong>{{ strtoupper($journal->status) }}</strong></p>
+        <h1>Laporan Jurnal Keamanan Operasional PT AICA INDRIA</h1>
+        <p>Dicetak pada: {{ \Carbon\Carbon::now()->locale('id')->isoFormat('D MMMM Y HH:mm') }} | Status: <strong>{{ strtoupper($journal->status) }}</strong></p>
     </div>
 
     <div class="section-title">Informasi Dasar</div>
     <table>
         <tr>
             <th>Tanggal</th>
-            <td>{{ \Carbon\Carbon::parse($journal->tanggal)->format('l, d F Y') }}</td>
+            {{-- Indonesian locale date: "Senin, 03 Maret 2025" --}}
+            <td>{{ \Carbon\Carbon::parse($journal->tanggal)->locale('id')->isoFormat('dddd, D MMMM Y') }}</td>
         </tr>
         <tr>
             <th>Lokasi</th>
-            <td>{{ $journal->location->nama_lokasi ?? '-' }}</td>
+            <td>{{ $journal->location->nama_lokasi ?? '-' }} ({{ $journal->location->alamat_lokasi ?? '-' }})</td>
         </tr>
         <tr>
             <th>Shift</th>
-            <td>{{ $journal->shift->nama_shift ?? '-' }} ({{ \Carbon\Carbon::parse($journal->shift->start_time)->format('H:i') }} - {{ \Carbon\Carbon::parse($journal->shift->end_time)->format('H:i') }})</td>
-        </tr>
+            <td>{{ $journal->shift->nama_shift ?? '-' }} ({{ \Carbon\Carbon::parse($journal->shift->mulai_shift)->format('H:i') }} - {{ \Carbon\Carbon::parse($journal->shift->selesai_shift)->format('H:i') }})</td>        </tr>
     </table>
 
     <div class="section-title">Informasi Personil</div>
@@ -108,22 +108,30 @@
         </tr>
     </table>
 
-    <!-- <table class="signature-table">
-        <tr>
-            <td>
-                Pembuat Laporan,<br>
-                <span class="signature-line">{{ $journal->user?->nama ?? '-' }}</span>
-            </td>
-            <td>
-                Penerima Serah Terima,<br>
-                <span class="signature-line">{{ $journal->handover?->nama ?? '-' }}</span>
-            </td>
-            <td>
-                Mengetahui PGA,<br>
-                <span class="signature-line">{{ $journal->approver?->nama ?? '-' }}</span>
-            </td>
-        </tr>
-    </table> -->
+    {{-- File Lampiran --}}
+    @if(isset($uploads) && $uploads->count() > 0)
+    <div class="section-title">File Lampiran</div>
+    @foreach($uploads as $upload)
+        @php
+            $ext       = strtolower(pathinfo($upload->file_name, PATHINFO_EXTENSION));
+            $cleanPath = str_replace('public/', '', $upload->file_path);
+            $absPath   = storage_path('app/public/' . $cleanPath);
+            $isImage   = in_array($ext, ['jpg', 'jpeg', 'png', 'gif']);
+        @endphp
+        <p class="attachment-name">{{ $upload->file_name }}</p>
+        @if($isImage && file_exists($absPath))
+            <img src="{{ $absPath }}" class="attachment-img" alt="{{ $upload->file_name }}">
+        @else
+            <div class="attachment-doc">
+                {{ $upload->file_name }} <em style="color:#94a3b8;">({{ strtoupper($ext) }} — tidak dapat ditampilkan secara inline)</em>
+            </div>
+        @endif
+    @endforeach
+    @endif
+
+    <div class="footer">
+        Dokumen ini digenerate secara otomatis oleh Sistem Jurnal Keamanan Operasional PT AICA INDRIA.
+    </div>
 
 </body>
 </html>

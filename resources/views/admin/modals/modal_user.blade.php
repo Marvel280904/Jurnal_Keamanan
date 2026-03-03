@@ -44,7 +44,7 @@
 
             <div class="mb-3">
                 <label class="block text-sm font-medium text-gray-700 mb-1">
-                    Password
+                    Password <span id="passwordRequired" class="text-red-500">*</span> <span id="passwordMinHint" class="text-gray-500 font-normal text-xs">(Minimal 6 Karakter)</span>
                     <span id="passwordNote" class="text-gray-400 font-normal text-xs hidden">(kosongkan jika tidak diubah)</span>
                 </label>
                 <input type="password" name="password" id="passwordInput" placeholder="Masukan Password" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm">

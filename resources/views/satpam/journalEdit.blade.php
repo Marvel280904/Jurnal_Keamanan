@@ -211,11 +211,52 @@
         {{-- Upload File --}}
         <div class="bg-white rounded-xl border border-gray-200 shadow-sm mb-6">
             <div class="px-6 py-4 border-b border-gray-100">
-                <h2 class="font-semibold text-gray-800 text-base">Upload File</h2>
+                <h2 class="font-semibold text-gray-800 text-base">File Lampiran</h2>
             </div>
             <div class="px-6 py-5">
+
+                {{-- Hidden field to track deletions --}}
+                <input type="hidden" name="delete_upload_ids" id="delete_upload_ids" value="">
+
+                {{-- Existing Files --}}
+                @if($journal->uploads && $journal->uploads->count() > 0)
+                <div class="mb-4">
+                    <p class="text-sm font-medium text-gray-700 mb-2">File Saat Ini:</p>
+                    <ul id="existing-file-list" class="space-y-2">
+                        @foreach($journal->uploads as $upload)
+                            @php
+                                $cleanPath = str_replace('public/', '', $upload->file_path);
+                                $fileUrl = asset('storage/' . $cleanPath);
+                                $ext = strtolower(pathinfo($upload->file_name, PATHINFO_EXTENSION));
+                            @endphp
+                            <li id="existing-{{ $upload->id }}" class="flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2.5 group">
+                                @if(in_array($ext, ['jpg','jpeg','png']))
+                                    <i class="bi bi-file-earmark-image-fill text-green-500 text-xl"></i>
+                                @elseif($ext === 'pdf')
+                                    <i class="bi bi-file-earmark-pdf-fill text-red-500 text-xl"></i>
+                                @elseif(in_array($ext, ['doc', 'docx']))
+                                    <i class="bi bi-file-earmark-word-fill text-blue-600 text-xl"></i>
+                                @else
+                                    <i class="bi bi-file-earmark-fill text-gray-400 text-xl"></i>
+                                @endif
+                                <div class="flex-1 min-w-0">
+                                    <a href="{{ $fileUrl }}" target="_blank" class="text-sm font-medium text-blue-600 hover:underline truncate block">{{ $upload->file_name }}</a>
+                                </div>
+                                <button type="button"
+                                    onclick="markDeleteExisting({{ $upload->id }})"
+                                    title="Hapus file ini"
+                                    class="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-full text-gray-400 hover:text-red-500 hover:bg-red-50 transition">
+                                    <i class="bi bi-x-lg text-sm"></i>
+                                </button>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+                <hr class="mb-4 border-gray-100">
+                @endif
+
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                    Attach File <span class="text-gray-400 font-normal">(Optional)</span>
+                    Tambah File Baru <span class="text-gray-400 font-normal">(Optional)</span>
                 </label>
 
                 {{-- Drop zone --}}
@@ -357,5 +398,20 @@
     function escapeHtml(str) {
         return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
+
+    // ── Existing File Deletion ──────────────────────────────────────────────────
+    let deleteUploadIds = [];
+
+    function markDeleteExisting(uploadId) {
+        if (!deleteUploadIds.includes(uploadId)) {
+            deleteUploadIds.push(uploadId);
+            document.getElementById('delete_upload_ids').value = deleteUploadIds.join(',');
+        }
+        // Immediately remove the row from the list
+        const row = document.getElementById('existing-' + uploadId);
+        if (row) row.remove();
+    }
+
 </script>
 @endsection
+
