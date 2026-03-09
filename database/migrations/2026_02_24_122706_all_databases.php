@@ -66,6 +66,7 @@ return new class extends Migration
             $table->foreignId('updated_by')->nullable()->constrained('users');
             $table->foreignId('handover_by')->nullable()->constrained('users');
             $table->foreignId('approved_by')->nullable()->constrained('users');
+            $table->text('catatan')->nullable();
             
             $table->timestamps();
 

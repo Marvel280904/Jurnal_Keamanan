@@ -123,6 +123,25 @@
                     <i class="bi bi-clock-history text-lg"></i>
                     <span class="text-sm">Log History</span>
                 </a>
+            @elseif(auth()->user()->role === 'PGA')
+                <a href="{{ route('pga.dashboard') }}"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition
+                        {{ request()->routeIs('pga.dashboard') ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800' }}">
+                    <i class="bi bi-grid text-lg"></i>
+                    <span class="text-sm">Dashboard</span>
+                </a>
+                <a href="{{ route('pga.groups-details') }}"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition
+                        {{ request()->routeIs('pga.groups-details') ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800' }}">
+                    <i class="bi bi-people text-lg"></i>
+                    <span class="text-sm">Group Details</span>
+                </a>
+                <a href="{{ route('pga.log-history') }}"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition
+                        {{ request()->routeIs('pga.log-history') ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800' }}">
+                    <i class="bi bi-clock-history text-lg"></i>
+                    <span class="text-sm">Log History</span>
+                </a>
             @endif
         </nav>
     </aside>

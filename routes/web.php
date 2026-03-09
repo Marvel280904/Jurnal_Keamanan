@@ -10,6 +10,8 @@ use App\Http\Controllers\SystemLogController;
 use App\Http\Controllers\SatpamController;
 use App\Http\Controllers\JournalController;
 use App\Http\Controllers\LogHistoryController;
+use App\Http\Controllers\PGAController;
+use App\Http\Controllers\GroupDetailsController;
 
 // Halaman Login (Hanya bisa diakses jika belum login/guest)
 Route::middleware(['guest', 'prevent-back-history'])->group(function () {
@@ -22,6 +24,13 @@ Route::middleware(['guest', 'prevent-back-history'])->group(function () {
 Route::middleware(['auth', 'prevent-back-history'])->group(function () {
     
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+    // ==========================================
+    // SHARED ROUTES (Satpam & PGA)
+    // ==========================================
+    Route::middleware(['role:Satpam,PGA'])->group(function () {
+        Route::get('/journal/view/{id}', [JournalController::class, 'viewJournalDetail'])->name('journal.view');
+    });
 
     // ==========================================
     // ADMIN ROUTES
@@ -76,7 +85,7 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
         Route::get('/satpam/log-history', [LogHistoryController::class, 'viewJournal'])->name('satpam.log-history');
 
         // Journal Actions
-        Route::get('/satpam/journal/view/{id}', [JournalController::class, 'viewJournalDetail'])->name('satpam.journal.view');
+        // Replaced route here to shared auth group
         Route::get('/satpam/journal/edit/{journal}', [JournalController::class, 'edit'])->name('satpam.journal.edit');
         Route::put('/satpam/journal/edit/{journal}', [JournalController::class, 'update'])->name('satpam.journal.update');
         Route::post('/satpam/journal/handover/{id}', [JournalController::class, 'handoverApproval'])->name('satpam.journal.handover');
@@ -88,14 +97,14 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
     // ==========================================
     Route::middleware(['role:PGA'])->group(function () {
         // PGA - Dashboard
-        Route::get('/pga/dashboard', function () {
-            return "Selamat Datang PGA!"; // Ganti dengan view dashboard pga Anda
-        })->name('pga.dashboard');
+        Route::get('/pga/dashboard', [PGAController::class, 'dashboard'])->name('pga.dashboard');
         
-        // Placeholder untuk Groups Details dan Log History PGA
-        Route::get('/pga/groups-details', function () {
-            return "Halaman Groups Details PGA (coming soon)";
-        })->name('pga.groups-details');
+        // PGA - Journal Approval
+        Route::post('/pga/journal/{id}/approve', [JournalController::class, 'finalApproval'])->name('pga.journal.approve');
+        
+
+        // PGA - Group Details
+        Route::get('/pga/groups-details', [GroupDetailsController::class, 'viewGroup'])->name('pga.groups-details');
 
         Route::get('/pga/log-history', function () {
             return "Halaman Log History PGA (coming soon)";

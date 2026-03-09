@@ -171,8 +171,8 @@ class JournalController extends Controller
 
     public function edit(Journal $journal)
     {
-        // Only members of the same group can edit, and only if pending
-        if ($journal->group_id !== Auth::user()->group_id || $journal->status !== 'Pending') {
+        // Only members of the same group can edit, and only if pending or rejected
+        if ($journal->group_id !== Auth::user()->group_id || !in_array($journal->status, ['Pending', 'Rejected'])) {
             return redirect()->back()->with('error', 'Anda tidak dapat mengedit jurnal ini.');
         }
 
@@ -190,7 +190,7 @@ class JournalController extends Controller
 
     public function update(Request $request, Journal $journal)
     {
-        if ($journal->group_id !== Auth::user()->group_id || $journal->status !== 'Pending') {
+        if ($journal->group_id !== Auth::user()->group_id || !in_array($journal->status, ['Pending', 'Rejected'])) {
             return redirect()->back()->with('error', 'Akses ditolak.');
         }
 
@@ -242,6 +242,8 @@ class JournalController extends Controller
 
         DB::beginTransaction();
         try {
+            $newStatus = $journal->status === 'Rejected' ? 'Waiting' : 'Pending';
+
             $journal->update([
                 'tanggal'          => $request->tanggal,
                 'lokasi_id'        => $request->lokasi_id,
@@ -254,6 +256,7 @@ class JournalController extends Controller
                 'barang_inven'     => $request->barang_inven,
                 'info_tambahan'    => $request->info_tambahan,
                 'updated_by'       => Auth::id(),
+                'status'           => $newStatus, // reset status based on previous state
             ]);
 
             // Handle deletions of existing files flagged by user
@@ -318,5 +321,31 @@ class JournalController extends Controller
         $pdf = Pdf::loadView('pdf_journal', $data);
         
         return $pdf->download('Journal-Keamanan-'. Carbon::parse($journal->tanggal)->format('Ymd') . '-' . Str::slug($journal->user->nama ?? 'unknown') . '.pdf');
+    }
+
+    public function finalApproval(Request $request, $id)
+    {
+        $journal = Journal::findOrFail($id);
+
+        // Security check: Only if current status is Waiting
+        if ($journal->status !== 'Waiting') {
+            return redirect()->back()->with('error', 'Jurnal ini tidak dalam status Waiting. Data mungkin telah berubah.');
+        }
+
+        $request->validate([
+            'status'  => 'required|in:Approved,Rejected',
+            'catatan' => 'required_if:status,Rejected|string',
+        ], [
+            'catatan.required_if' => 'Catatan wajib diisi jika jurnal ditolak.',
+        ]);
+
+        $status = $request->input('status');
+        
+        $journal->catatan = $request->input('catatan');
+        $journal->save();
+
+        $journal->finalApproval(Auth::id(), $status);
+
+        return redirect()->back()->with('success', 'Jurnal berhasil ' . ($status === 'Approved' ? 'disetujui' : 'ditolak') . '.');
     }
 }

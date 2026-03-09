@@ -9,7 +9,8 @@ class Journal extends Model
     protected $fillable = [
         'tanggal', 'user_id', 'group_id', 'lokasi_id', 'shift_id', 'next_shift',
         'laporan_kegiatan', 'kejadian_temuan', 'lembur', 'proyek_vendor', 
-        'barang_inven', 'info_tambahan', 'status', 'updated_by', 'handover_by', 'approved_by'
+        'barang_inven', 'info_tambahan', 'status', 'updated_by', 'handover_by', 
+        'approved_by', 'catatan'
     ];
 
     // Relasi

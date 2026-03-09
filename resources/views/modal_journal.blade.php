@@ -38,12 +38,19 @@
                 </div>
             </div>
 
-            <!-- Approval Info -->
             <div id="v_approvalInfo" class="hidden">
                  <div class="border-l-4 border-yellow-400 bg-yellow-50 p-3 rounded-r-lg text-sm text-gray-700">
                      <p><span class="font-bold">Diperbarui Oleh:</span> <span id="v_updatedBy"></span></p>
                      <p><span class="font-bold">Serah Terima Oleh:</span> <span id="v_handoverBy"></span></p>
-                     <p><span class="font-bold">Disetujui Oleh (PGA):</span> <span id="v_approvedBy"></span></p>
+                     <p><span class="font-bold">Persetujuan Akhir Oleh (PGA):</span> <span id="v_approvedBy"></span></p>
+                 </div>
+            </div>
+
+            <!-- Catatan Rejection Info -->
+            <div id="v_catatanInfo" class="hidden">
+                 <div class="border-l-4 border-red-500 bg-red-50 p-4 rounded-r-lg text-sm text-red-800">
+                     <p class="font-bold mb-1 flex items-center gap-2"><i class="bi bi-exclamation-circle text-red-500"></i> Alasan Penolakan (Catatan Revisi):</p>
+                     <p id="v_catatanText" class="text-gray-800 bg-white/50 p-2 rounded border border-red-100"></p>
                  </div>
             </div>
 
@@ -133,7 +140,7 @@
 
     function openViewModal(id) {
         // Fetch journal data via AJAX
-        fetch(`/satpam/journal/view/${id}`)
+        fetch(`/journal/view/${id}`)
             .then(response => response.json())
             .then(data => {
                 if(data.success) {
@@ -154,6 +161,15 @@
                     document.getElementById('v_updatedBy').textContent = journal.updater ? journal.updater.nama : 'Tidak Ada';
                     document.getElementById('v_handoverBy').textContent = journal.handover ? journal.handover.nama : 'Tidak Ada';
                     document.getElementById('v_approvedBy').textContent = journal.approver ? journal.approver.nama : 'Tidak Ada';
+
+                    // Catatan Penolakan
+                    const catatanBox = document.getElementById('v_catatanInfo');
+                    if (journal.catatan) {
+                        catatanBox.classList.remove('hidden');
+                        document.getElementById('v_catatanText').textContent = journal.catatan;
+                    } else {
+                        catatanBox.classList.add('hidden');
+                    }
 
                     document.getElementById('v_laporan').textContent = journal.laporan_kegiatan;
                     document.getElementById('v_kejadian').textContent = journal.kejadian_temuan;

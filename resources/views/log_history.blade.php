@@ -73,7 +73,7 @@
                                 <button onclick="openViewModal({{ $journal->id }})" class="text-blue-500 hover:text-blue-700 transition" title="View Details">
                                     <i class="bi bi-eye text-lg"></i>
                                 </button>
-                                @if($journal->status === 'Pending' && $journal->group_id === auth()->user()->group_id)
+                                @if(($journal->status === 'Pending' || $journal->status === 'Rejected') && $journal->group_id === auth()->user()->group_id)
                                 <a href="{{ route('satpam.journal.edit', $journal->id) }}" class="text-yellow-500 hover:text-yellow-700 transition" title="Edit Journal">
                                     <i class="bi bi-pencil-square text-lg"></i>
                                 </a>
