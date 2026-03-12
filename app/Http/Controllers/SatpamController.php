@@ -17,31 +17,31 @@ class SatpamController extends Controller
         $today = Carbon::today();
 
         // Journals to submit today:
-        // For each journal today where this group is the next_shift,
-        // check if group already submitted the corresponding next journal.
+        // Get ALL journals where this group is the next_shift,
+        // compute the actual reminder date (handling shift wrap-around),
+        // and only count those whose reminderDate equals today.
         $shifts = \App\Models\Shift::orderBy('mulai_shift')->get()->values();
 
-        $pendingToday = Journal::with(['shift'])
+        $allPending = Journal::with(['shift'])
             ->where('next_shift', $group_id)
-            ->whereDate('tanggal', $today)
             ->get();
 
         $journals_to_submit = 0;
-        foreach ($pendingToday as $journal) {
+        foreach ($allPending as $journal) {
             $currentShift = $journal->shift;
             if (!$currentShift || $shifts->isEmpty()) continue;
 
             $currentIndex = $shifts->search(fn($s) => $s->id === $currentShift->id);
             if ($currentIndex === false) continue;
 
-            $nextIndex = $currentIndex + 1;
-            $wrapsAround = $nextIndex >= $shifts->count();
+            $nextIndex    = $currentIndex + 1;
+            $wrapsAround  = $nextIndex >= $shifts->count();
+            $nextShift    = $shifts[$wrapsAround ? 0 : $nextIndex];
+            $journalDate  = \Carbon\Carbon::parse($journal->tanggal);
+            $reminderDate = $wrapsAround ? $journalDate->copy()->addDay() : $journalDate->copy();
 
-            // If the next shift wraps around to tomorrow, skip it from today's count
-            if ($wrapsAround) continue;
-
-            $nextShift = $shifts[$nextIndex];
-            $reminderDate = $today->copy();
+            // Only count if the reminder is for today
+            if (!$reminderDate->isSameDay($today)) continue;
 
             $alreadySubmitted = Journal::where('group_id', $group_id)
                 ->whereDate('tanggal', $reminderDate)

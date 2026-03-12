@@ -37,7 +37,7 @@
 
         {{-- Right: Bell + User --}}
         <div class="flex items-center gap-3 md:gap-4">
-            @if(auth()->user()->role === 'Satpam')
+            @if(auth()->user()->role === 'Satpam' || auth()->user()->role === 'PGA')
                 <div class="relative" id="bellWrapper">
                     <button id="bellBtn" onclick="toggleBellDropdown()" class="relative text-gray-400 hover:text-blue-600 focus:outline-none">
                         <i class="bi bi-bell text-xl"></i>
@@ -63,6 +63,26 @@
                                             </div>
                                             <div>
                                                 <p class="text-xs font-bold text-red-700 mb-0.5">Harap revisi Jurnal</p>
+                                                <p class="text-xs text-gray-600"><span class="font-semibold">Tanggal:</span> {{ $reminder['tanggal'] }}</p>
+                                                <p class="text-xs text-gray-600"><span class="font-semibold">Lokasi:</span> {{ $reminder['lokasi'] }}</p>
+                                                <p class="text-xs text-gray-600"><span class="font-semibold">Shift:</span> {{ $reminder['shift'] }}</p>
+                                            </div>
+                                        @elseif($reminder['type'] === 'handover')
+                                            <div class="mt-0.5 w-7 h-7 rounded-full bg-blue-100 text-blue-500 flex items-center justify-center flex-shrink-0">
+                                                <i class="bi bi-arrow-left-right text-sm"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-xs font-bold text-blue-700 mb-0.5">Harap Serah Terima Jurnal</p>
+                                                <p class="text-xs text-gray-600"><span class="font-semibold">Tanggal:</span> {{ $reminder['tanggal'] }}</p>
+                                                <p class="text-xs text-gray-600"><span class="font-semibold">Lokasi:</span> {{ $reminder['lokasi'] }}</p>
+                                                <p class="text-xs text-gray-600"><span class="font-semibold">Shift:</span> {{ $reminder['shift'] }}</p>
+                                            </div>
+                                        @elseif($reminder['type'] === 'waiting')
+                                            <div class="mt-0.5 w-7 h-7 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center flex-shrink-0">
+                                                <i class="bi bi-clock-history text-sm"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-xs font-bold text-yellow-700 mb-0.5">Harap Melakukan Persetujuan Jurnal</p>
                                                 <p class="text-xs text-gray-600"><span class="font-semibold">Tanggal:</span> {{ $reminder['tanggal'] }}</p>
                                                 <p class="text-xs text-gray-600"><span class="font-semibold">Lokasi:</span> {{ $reminder['lokasi'] }}</p>
                                                 <p class="text-xs text-gray-600"><span class="font-semibold">Shift:</span> {{ $reminder['shift'] }}</p>
