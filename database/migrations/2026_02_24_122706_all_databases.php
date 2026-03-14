@@ -21,7 +21,7 @@ return new class extends Migration
             $table->id();
             $table->string('username')->unique();
             $table->string('password');
-            $table->string('nama');
+            $table->string('nama')->unique();
             $table->string('role');
             $table->foreignId('group_id')->nullable()->constrained('groups')->onDelete('set null');
             $table->timestamps();

@@ -322,7 +322,7 @@ class JournalController extends Controller
         // Ensure you create resources/views/pdf_journal.blade.php
         $pdf = Pdf::loadView('pdf_journal', $data);
         
-        return $pdf->download('Journal-Keamanan-'. Carbon::parse($journal->tanggal)->format('Ymd') . '-' . Str::slug($journal->user->nama ?? 'unknown') . '.pdf');
+        return $pdf->download('Journal Keamanan PT AICA INDRIA - '. Carbon::parse($journal->tanggal)->format('Ymd') . '-' . Str::slug($journal->group->nama_grup ?? 'unknown') . '.pdf');
     }
 
     public function finalApproval(Request $request, $id)

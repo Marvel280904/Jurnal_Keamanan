@@ -59,7 +59,7 @@ class SatpamController extends Controller
             ->where('status', 'Pending')
             ->count();
 
-        // Waiting approval
+        // Waiting approval untuk serah terima jurnal
         $waiting_approval = Journal::where('next_shift', $group_id)
             ->where('status', 'Pending')
             ->count();

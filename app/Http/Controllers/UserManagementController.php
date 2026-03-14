@@ -22,13 +22,14 @@ class UserManagementController extends Controller
     public function addUser(Request $request)
     {
         $request->validate([
-            'nama'     => 'required|string|max:255',
+            'nama'     => 'required|string|max:255|unique:users,nama',
             'username' => 'required|string|max:255|unique:users,username',
             'password' => 'required|string|min:6',
             'role'     => 'required|in:Admin,Satpam,PGA',
         ], [
             'nama.required' => 'Nama wajib diisi!',
             'nama.max' => 'Nama maksimal 255 karakter!',
+            'nama.unique' => 'Nama sudah digunakan!',
             'username.required' => 'Username wajib diisi!',
             'username.max' => 'Username maksimal 255 karakter!',
             'username.unique' => 'Username sudah ada!',
@@ -59,13 +60,14 @@ class UserManagementController extends Controller
     public function editUser(Request $request, User $user)
     {
         $request->validate([
-            'nama'     => 'required|string|max:255',
+            'nama'     => 'required|string|max:255|unique:users,nama,' . $user->id,
             'username' => 'required|string|max:255|unique:users,username,' . $user->id,
             'password' => 'nullable|string|min:6',
             'role'     => 'required|in:Admin,Satpam,PGA',
         ], [
             'nama.required' => 'Nama wajib diisi!',
             'nama.max' => 'Nama maksimal 255 karakter!',
+            'nama.unique' => 'Nama sudah digunakan!',
             'username.required' => 'Username wajib diisi!',
             'username.max' => 'Username maksimal 255 karakter!',
             'username.unique' => 'Username sudah ada!',
